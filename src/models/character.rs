@@ -38,9 +38,7 @@ pub struct Character {
 impl Character {
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
-            let mut character = Client::default()
-                .get_character(serde_json::json!({"id": self.id}))
-                .await?;
+            let mut character = Client::default().get_character(self.id).await?;
             character.is_full_loaded = true;
 
             Ok(character)
