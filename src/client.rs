@@ -60,7 +60,7 @@ impl Client {
     ) -> Result<crate::models::Anime> {
         let variables = match id {
             Some(id) => serde_json::json!({ "id": id }),
-            None => serde_json::json!({ "mal_id": mal_id }),
+            None => serde_json::json!({ "mal_id": mal_id.unwrap_or(0) }),
         };
         let data = self.request("anime", "get", variables).await.unwrap();
 
@@ -100,7 +100,7 @@ impl Client {
     ) -> Result<crate::models::Manga> {
         let variables = match id {
             Some(id) => serde_json::json!({ "id": id }),
-            None => serde_json::json!({ "mal_id": mal_id }),
+            None => serde_json::json!({ "mal_id": mal_id.unwrap_or(0) }),
         };
         let data = self.request("manga", "get", variables).await.unwrap();
 
@@ -114,11 +114,29 @@ impl Client {
         }
     }
 
-    pub async fn get_character(
-        &self,
-        variables: serde_json::Value,
-    ) -> Result<crate::models::Character> {
-        let data = self.request("character", "get", variables).await.unwrap();
+    /// Get a character by its ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The ID of the character.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use anilist::Client;
+    ///
+    /// let client = Client::default();
+    /// let character = client.get_character(1).await.unwrap();
+    /// ```
+    pub async fn get_character(&self, id: i64) -> Result<crate::models::Character> {
+        let data = self
+            .request("character", "get", serde_json::json!({ "id": id }))
+            .await
+            .unwrap();
 
         match serde_json::from_str::<Character>(&data["data"]["Character"].to_string()) {
             Ok(mut character) => {
@@ -130,10 +148,46 @@ impl Client {
         }
     }
 
-    pub async fn get_char(&self, variables: serde_json::Value) -> Result<crate::models::Character> {
-        self.get_character(variables).await
+    /// Get a character by its ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The ID of the character.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use anilist::Client;
+    ///
+    /// let client = Client::default();
+    /// let character = client.get_char(1).await.unwrap();
+    /// ```
+    pub async fn get_char(&self, id: i64) -> Result<crate::models::Character> {
+        self.get_character(id).await
     }
 
+    /// Get a person by its ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The ID of the person.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use anilist::Client;
+    ///
+    /// let client = Client::default();
+    /// let person = client.get_person(1).await.unwrap();
+    /// ```
     pub async fn get_person(&self, id: i64) -> Result<crate::models::Person> {
         let data = self
             .request("person", "get", serde_json::json!({ "id": id }))
@@ -159,6 +213,17 @@ impl Client {
         unimplemented!()
     }
 
+    /// Send a request to the AniList API.
+    ///
+    /// # Arguments
+    ///
+    /// * `media_type` - The type of media to request.
+    /// * `action` - The action to perform.
+    /// * `variables` - The variables to send with the request.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
     pub(crate) async fn request(
         &self,
         media_type: &str,
@@ -184,6 +249,15 @@ impl Client {
         Ok(result)
     }
 
+    /// Get the GraphQL query for a specific media type.
+    ///
+    /// # Arguments
+    ///
+    /// * `media_type` - The type of media to get the query for.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the media type is not valid.
     pub(crate) fn get_query(media_type: &str, _action: &str) -> Result<String> {
         let media_type = media_type.to_lowercase();
         let media_types = ["anime", "manga", "character", "user", "person", "studio"];
