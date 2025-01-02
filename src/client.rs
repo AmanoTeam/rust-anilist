@@ -238,7 +238,7 @@ impl Client {
     /// # Errors
     ///
     /// Returns an error if the request fails.
-    pub(crate) async fn request(
+    async fn request(
         &self,
         media_type: MediaType,
         action: Action,
@@ -272,7 +272,7 @@ impl Client {
     /// # Errors
     ///
     /// Returns an error if the media type is not valid.
-    pub(crate) fn get_query(media_type: MediaType, action: Action) -> Result<String> {
+    fn get_query(media_type: MediaType, action: Action) -> Result<String> {
         let graphql_query = match action {
             Action::Get => {
                 match media_type {
