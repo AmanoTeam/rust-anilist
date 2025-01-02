@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
+# Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
 query ($id: Int, $mal_id: Int) {
   Media (id: $id, idMal: $mal_id, type: MANGA) {

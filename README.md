@@ -8,7 +8,7 @@ It's working, just the basics, but it already works.
 
 ## License
 
-Copyright © 2022 [AndrielFR](https://github.com/AndrielFR)
+Copyright © 2022-2025 [AndrielFR](https://github.com/AndrielFR)
 
 Licensed under the [Expat/MIT license](LICENSE).
 This project is also [REUSE compliant](https://reuse.software/).

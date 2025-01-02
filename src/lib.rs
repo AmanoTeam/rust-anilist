@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
+// Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
 // #![deny(missing_docs)]
 #![allow(clippy::let_and_return)] // TODO: Remove this

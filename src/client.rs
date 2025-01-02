@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
+// Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
 use std::time::Duration;
 
@@ -8,17 +8,10 @@ use crate::Result;
 
 #[derive(Clone)]
 pub struct Client {
+    /// The API token to use for requests.
     api_token: Option<String>,
+    /// The timeout for requests (in seconds).
     timeout: u64,
-}
-
-impl Default for Client {
-    fn default() -> Self {
-        Client {
-            api_token: None,
-            timeout: 20,
-        }
-    }
 }
 
 impl Client {
@@ -62,7 +55,10 @@ impl Client {
             Some(id) => serde_json::json!({ "id": id }),
             None => serde_json::json!({ "mal_id": mal_id.unwrap_or(0) }),
         };
-        let data = self.request("anime", "get", variables).await.unwrap();
+        let data = self
+            .request(MediaType::Anime, Action::Get, variables)
+            .await
+            .unwrap();
 
         match serde_json::from_str::<Anime>(&data["data"]["Media"].to_string()) {
             Ok(mut anime) => {
@@ -102,7 +98,10 @@ impl Client {
             Some(id) => serde_json::json!({ "id": id }),
             None => serde_json::json!({ "mal_id": mal_id.unwrap_or(0) }),
         };
-        let data = self.request("manga", "get", variables).await.unwrap();
+        let data = self
+            .request(MediaType::Manga, Action::Get, variables)
+            .await
+            .unwrap();
 
         match serde_json::from_str::<Manga>(&data["data"]["Media"].to_string()) {
             Ok(mut manga) => {
@@ -134,7 +133,11 @@ impl Client {
     /// ```
     pub async fn get_character(&self, id: i64) -> Result<crate::models::Character> {
         let data = self
-            .request("character", "get", serde_json::json!({ "id": id }))
+            .request(
+                MediaType::Character,
+                Action::Get,
+                serde_json::json!({ "id": id }),
+            )
             .await
             .unwrap();
 
@@ -190,7 +193,11 @@ impl Client {
     /// ```
     pub async fn get_person(&self, id: i64) -> Result<crate::models::Person> {
         let data = self
-            .request("person", "get", serde_json::json!({ "id": id }))
+            .request(
+                MediaType::Person,
+                Action::Get,
+                serde_json::json!({ "id": id }),
+            )
             .await
             .unwrap();
 
@@ -204,11 +211,18 @@ impl Client {
         }
     }
 
+    /// Search for anime.
+    ///
+    /// # Arguments
+    ///
     pub async fn search_anime(
         &self,
         variables: serde_json::Value,
     ) -> Option<Vec<crate::models::Anime>> {
-        let result = self.request("anime", "search", variables).await.unwrap();
+        let result = self
+            .request(MediaType::Anime, Action::Search, variables)
+            .await
+            .unwrap();
         let mut _models = Vec::<crate::models::Anime>::new();
         unimplemented!()
     }
@@ -226,8 +240,8 @@ impl Client {
     /// Returns an error if the request fails.
     pub(crate) async fn request(
         &self,
-        media_type: &str,
-        action: &str,
+        media_type: MediaType,
+        action: Action,
         variables: serde_json::Value,
     ) -> std::result::Result<serde_json::Value, reqwest::Error> {
         let query = Client::get_query(media_type, action).unwrap();
@@ -258,23 +272,71 @@ impl Client {
     /// # Errors
     ///
     /// Returns an error if the media type is not valid.
-    pub(crate) fn get_query(media_type: &str, _action: &str) -> Result<String> {
-        let media_type = media_type.to_lowercase();
-        let media_types = ["anime", "manga", "character", "user", "person", "studio"];
-        if !media_types.contains(&media_type.as_str()) {
-            panic!("The media type '{}' does not exits", { media_type });
-        }
-
-        let graphql_query = match media_type.as_str() {
-            "anime" => include_str!("../queries/get_anime.graphql").to_string(),
-            "manga" => include_str!("../queries/get_manga.graphql").to_string(),
-            "character" => include_str!("../queries/get_character.graphql").to_string(),
-            // "user" => include_str!("../queries/get_user.graphql").to_string(),
-            "person" => include_str!("../queries/get_person.graphql").to_string(),
-            // "studio" => include_str!("../queries/get_studio.graphql").to_string(),
-            _ => unimplemented!(),
+    pub(crate) fn get_query(media_type: MediaType, action: Action) -> Result<String> {
+        let graphql_query = match action {
+            Action::Get => {
+                match media_type {
+                    MediaType::Anime => include_str!("../queries/get_anime.graphql").to_string(),
+                    MediaType::Manga => include_str!("../queries/get_manga.graphql").to_string(),
+                    MediaType::Character => {
+                        include_str!("../queries/get_character.graphql").to_string()
+                    }
+                    // MediaType::User => include_str!("../queries/get_user.graphql").to_string(),
+                    MediaType::Person => include_str!("../queries/get_person.graphql").to_string(),
+                    // MediaType::Studio => include_str!("../queries/get_studio.graphql").to_string(),
+                    _ => unimplemented!(),
+                }
+            }
+            Action::Search => {
+                match media_type {
+                    // MediaType::Anime => include_str!("../queries/search_anime.graphql").to_string(),
+                    // MediaType::Manga => include_str!("../queries/search_manga.graphql").to_string(),
+                    // MediaType::Character => {
+                    //     include_str!("../queries/search_character.graphql").to_string()
+                    // }
+                    // MediaType::User => include_str!("../queries/search_user.graphql").to_string(),
+                    // MediaType::Person => {
+                    //     include_str!("../queries/search_person.graphql").to_string()
+                    // }
+                    // MediaType::Studio => include_str!("../queries/search_studio.graphql").to_string(),
+                    _ => unimplemented!(),
+                }
+            }
         };
 
         Ok(graphql_query)
     }
+}
+
+impl Default for Client {
+    fn default() -> Self {
+        Client {
+            api_token: None,
+            timeout: 20,
+        }
+    }
+}
+
+/// The action to perform.
+enum Action {
+    /// Get media by ID.
+    Get,
+    /// Search for media.
+    Search,
+}
+
+/// The type of media to request.
+enum MediaType {
+    /// An anime.
+    Anime,
+    /// A manga.
+    Manga,
+    /// A character.
+    Character,
+    /// An user.
+    User,
+    /// A person.
+    Person,
+    /// A studio.
+    Studio,
 }
