@@ -22,17 +22,46 @@ impl Default for Client {
 }
 
 impl Client {
+    /// Set the API token.
     pub fn api_token(mut self, token: &str) -> Self {
         self.api_token = Some(token.to_string());
         self
     }
 
+    /// Set the timeout for the requests (in seconds).
     pub fn timeout(mut self, seconds: u64) -> Self {
         self.timeout = seconds;
         self
     }
 
-    pub async fn get_anime(&self, variables: serde_json::Value) -> Result<crate::models::Anime> {
+    /// Get an anime by its ID or MAL ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The ID of the anime.
+    /// * `mal_id` - The MAL ID of the anime.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use anilist::Client;
+    ///
+    /// let client = Client::default();
+    /// let anime = client.get_anime(Some(1), None).await.unwrap();
+    /// ```
+    pub async fn get_anime(
+        &self,
+        id: Option<i64>,
+        mal_id: Option<i64>,
+    ) -> Result<crate::models::Anime> {
+        let variables = match id {
+            Some(id) => serde_json::json!({ "id": id }),
+            None => serde_json::json!({ "mal_id": mal_id }),
+        };
         let data = self.request("anime", "get", variables).await.unwrap();
 
         match serde_json::from_str::<Anime>(&data["data"]["Media"].to_string()) {
@@ -45,7 +74,34 @@ impl Client {
         }
     }
 
-    pub async fn get_manga(&self, variables: serde_json::Value) -> Result<crate::models::Manga> {
+    /// Get a manga by its ID or MAL ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The ID of the manga.
+    /// * `mal_id` - The MAL ID of the manga.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use anilist::Client;
+    ///
+    /// let client = Client::default();
+    /// let manga = client.get_manga(Some(1), None).await.unwrap();
+    /// ```
+    pub async fn get_manga(
+        &self,
+        id: Option<i64>,
+        mal_id: Option<i64>,
+    ) -> Result<crate::models::Manga> {
+        let variables = match id {
+            Some(id) => serde_json::json!({ "id": id }),
+            None => serde_json::json!({ "mal_id": mal_id }),
+        };
         let data = self.request("manga", "get", variables).await.unwrap();
 
         match serde_json::from_str::<Manga>(&data["data"]["Media"].to_string()) {

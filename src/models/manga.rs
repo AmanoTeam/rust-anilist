@@ -72,7 +72,7 @@ impl Manga {
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
             let mut manga = Client::default()
-                .get_manga(serde_json::json!({"id": self.id}))
+                .get_manga(Some(self.id), self.id_mal)
                 .await
                 .unwrap();
             manga.is_full_loaded = true;

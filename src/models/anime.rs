@@ -78,7 +78,7 @@ impl Anime {
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
             let mut anime = Client::default()
-                .get_anime(serde_json::json!({"id": self.id}))
+                .get_anime(Some(self.id), self.id_mal)
                 .await
                 .unwrap();
             anime.is_full_loaded = true;
