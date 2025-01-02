@@ -71,10 +71,7 @@ pub struct Manga {
 impl Manga {
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
-            let mut manga = Client::default()
-                .get_manga(Some(self.id), self.id_mal)
-                .await
-                .unwrap();
+            let mut manga = Client::default().get_manga(self.id).await.unwrap();
             manga.is_full_loaded = true;
 
             Ok(manga)

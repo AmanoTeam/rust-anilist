@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
-query ($id: Int, $mal_id: Int) {
-  Media (id: $id, idMal: $mal_id, type: ANIME) {
+query ($id: Int) {
+  Media (id: $id, type: ANIME) {
     id
     idMal
     title {

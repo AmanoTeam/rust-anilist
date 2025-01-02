@@ -43,22 +43,18 @@ impl Client {
     ///
     /// ```
     /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
-    /// let anime = client.get_anime(Some(1), None).await?;
+    /// let anime = client.get_anime(1).await?;
     ///
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_anime(
-        &self,
-        id: Option<i64>,
-        mal_id: Option<i64>,
-    ) -> Result<crate::models::Anime> {
-        let variables = match id {
-            Some(id) => serde_json::json!({ "id": id }),
-            None => serde_json::json!({ "mal_id": mal_id.unwrap_or(0) }),
-        };
+    pub async fn get_anime(&self, id: i64) -> Result<crate::models::Anime> {
         let data = self
-            .request(MediaType::Anime, Action::Get, variables)
+            .request(
+                MediaType::Anime,
+                Action::Get,
+                serde_json::json!({ "id": id }),
+            )
             .await
             .unwrap();
 
@@ -87,22 +83,18 @@ impl Client {
     ///
     /// ```
     /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
-    /// let manga = client.get_manga(Some(1), None).await?;
+    /// let manga = client.get_manga(1).await?;
     ///
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_manga(
-        &self,
-        id: Option<i64>,
-        mal_id: Option<i64>,
-    ) -> Result<crate::models::Manga> {
-        let variables = match id {
-            Some(id) => serde_json::json!({ "id": id }),
-            None => serde_json::json!({ "mal_id": mal_id.unwrap_or(0) }),
-        };
+    pub async fn get_manga(&self, id: i64) -> Result<crate::models::Manga> {
         let data = self
-            .request(MediaType::Manga, Action::Get, variables)
+            .request(
+                MediaType::Manga,
+                Action::Get,
+                serde_json::json!({ "id": id }),
+            )
             .await
             .unwrap();
 
@@ -207,10 +199,6 @@ impl Client {
             .await
             .unwrap();
 
-        std::fs::File::create("user.json")
-            .unwrap()
-            .write_all(data["data"]["User"].to_string().as_bytes())
-            .unwrap();
         match serde_json::from_str::<User>(&data["data"]["User"].to_string()) {
             Ok(user) => Ok(user),
             Err(e) => Err(crate::Error::ApiError(e.to_string())),

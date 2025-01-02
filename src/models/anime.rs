@@ -77,14 +77,11 @@ pub struct Anime {
 impl Anime {
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
-            let mut anime = Client::default()
-                .get_anime(Some(self.id), self.id_mal)
-                .await
-                .unwrap();
+            let mut anime = Client::default().get_anime(self.id).await.unwrap();
             anime.is_full_loaded = true;
             Ok(anime)
         } else {
-            panic!("This anime is already full loaded")
+            panic!("This anime is already full loaded!")
         }
     }
 }
