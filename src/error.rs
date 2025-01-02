@@ -1,36 +1,22 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
-use std::error::Error as StdError;
-use std::fmt;
+use thiserror::Error as TError;
 
+/// A specialized `Result` type for operations that can return an `Error`.
+///
+/// This is defined as a convenience to avoid writing out `std::result::Result`
+/// with the `Error` type repeatedly.
 pub type Result<T> = std::result::Result<T, Error>;
 
-#[derive(Debug)]
+/// Represents the various errors that can occur in the application.
+///
+/// This enum defines different types of errors that can be encountered,
+/// such as invalid IDs and API errors.
+#[derive(TError, Debug)]
 pub enum Error {
+    #[error("invalid ID")]
     InvalidId,
-    InvalidMediaType,
+    #[error("api error: `{0}`")]
     ApiError(String),
-}
-
-#[derive(Debug)]
-struct InvalidId;
-
-impl StdError for InvalidId {}
-
-impl fmt::Display for InvalidId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "The given id is invalid")
-    }
-}
-
-#[derive(Debug)]
-struct InvalidMediaType;
-
-impl StdError for InvalidMediaType {}
-
-impl fmt::Display for InvalidMediaType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "The given media type is invalid")
-    }
 }

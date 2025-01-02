@@ -16,4 +16,5 @@ edition = "2021"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde = { version = "1", features = ["derive"] }
 reqwest = "*"
+thiserror = "2"
 serde_json = "1"

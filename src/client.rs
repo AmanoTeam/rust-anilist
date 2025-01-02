@@ -40,11 +40,12 @@ impl Client {
     ///
     /// # Example
     ///
-    /// ```no_run
-    /// use anilist::Client;
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let anime = client.get_anime(Some(1), None).await?;
     ///
-    /// let client = Client::default();
-    /// let anime = client.get_anime(Some(1), None).await.unwrap();
+    /// # Ok(())
+    /// # }
     /// ```
     pub async fn get_anime(
         &self,
@@ -83,11 +84,12 @@ impl Client {
     ///
     /// # Example
     ///
-    /// ```no_run
-    /// use anilist::Client;
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let manga = client.get_manga(Some(1), None).await?;
     ///
-    /// let client = Client::default();
-    /// let manga = client.get_manga(Some(1), None).await.unwrap();
+    /// # Ok(())
+    /// # }
     /// ```
     pub async fn get_manga(
         &self,
@@ -125,11 +127,12 @@ impl Client {
     ///
     /// # Example
     ///
-    /// ```no_run
-    /// use anilist::Client;
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let character = client.get_character(1).await?;
     ///
-    /// let client = Client::default();
-    /// let character = client.get_character(1).await.unwrap();
+    /// # Ok(())
+    /// # }
     /// ```
     pub async fn get_character(&self, id: i64) -> Result<crate::models::Character> {
         let data = self
@@ -163,11 +166,12 @@ impl Client {
     ///
     /// # Example
     ///
-    /// ```no_run
-    /// use anilist::Client;
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let character = client.get_char(1).await?;
     ///
-    /// let client = Client::default();
-    /// let character = client.get_char(1).await.unwrap();
+    /// # Ok(())
+    /// # }
     /// ```
     pub async fn get_char(&self, id: i64) -> Result<crate::models::Character> {
         self.get_character(id).await
@@ -185,11 +189,12 @@ impl Client {
     ///
     /// # Example
     ///
-    /// ```no_run
-    /// use anilist::Client;
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let person = client.get_person(1).await?;
     ///
-    /// let client = Client::default();
-    /// let person = client.get_person(1).await.unwrap();
+    /// # Ok(())
+    /// # }
     /// ```
     pub async fn get_person(&self, id: i64) -> Result<crate::models::Person> {
         let data = self
