@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+use std::io::Write;
 use std::time::Duration;
 
-use crate::models::{Anime, Character, Manga, Person};
+use crate::models::{Anime, Character, Manga, Person, User};
 use crate::Result;
 
 #[derive(Clone)]
@@ -177,6 +178,82 @@ impl Client {
         self.get_character(id).await
     }
 
+    /// Get a user by its ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The ID of the user.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let user = client.get_user(1).await?;
+    ///
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn get_user(&self, id: i64) -> Result<crate::models::User> {
+        let data = self
+            .request(
+                MediaType::User,
+                Action::Get,
+                serde_json::json!({ "id": id }),
+            )
+            .await
+            .unwrap();
+
+        std::fs::File::create("user.json")
+            .unwrap()
+            .write_all(data["data"]["User"].to_string().as_bytes())
+            .unwrap();
+        match serde_json::from_str::<User>(&data["data"]["User"].to_string()) {
+            Ok(user) => Ok(user),
+            Err(e) => Err(crate::Error::ApiError(e.to_string())),
+        }
+    }
+
+    /// Get a user by its name.
+    ///
+    /// # Arguments
+    ///
+    /// * `name` - The name of the user.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let user = client.get_user_by_name("andrielfr").await?;
+    ///
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn get_user_by_name<N: ToString>(&self, name: N) -> Result<crate::models::User> {
+        let name = name.to_string();
+
+        let data = self
+            .request(
+                MediaType::User,
+                Action::Get,
+                serde_json::json!({ "name": name }),
+            )
+            .await
+            .unwrap();
+
+        match serde_json::from_str::<User>(&data["data"]["User"].to_string()) {
+            Ok(user) => Ok(user),
+            Err(e) => Err(crate::Error::ApiError(e.to_string())),
+        }
+    }
+
     /// Get a person by its ID.
     ///
     /// # Arguments
@@ -286,7 +363,7 @@ impl Client {
                     MediaType::Character => {
                         include_str!("../queries/get_character.graphql").to_string()
                     }
-                    // MediaType::User => include_str!("../queries/get_user.graphql").to_string(),
+                    MediaType::User => include_str!("../queries/get_user.graphql").to_string(),
                     MediaType::Person => include_str!("../queries/get_person.graphql").to_string(),
                     // MediaType::Studio => include_str!("../queries/get_studio.graphql").to_string(),
                     _ => unimplemented!(),

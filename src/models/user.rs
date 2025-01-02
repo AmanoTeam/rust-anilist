@@ -22,12 +22,14 @@ pub struct User {
     name: String,
     about: Option<String>,
     avatar: Option<Image>,
+    #[serde(rename = "bannerImage")]
     banner: Option<String>,
     is_following: Option<bool>,
     is_follower: Option<bool>,
     is_blocked: Option<bool>,
     options: Option<Options>,
-    media_list_options: MediaListOptions,
+    media_list_options: Option<MediaListOptions>,
+    #[serde(skip)]
     favourites: Favourites,
     statistics: UserStatisticTypes,
 }
@@ -35,16 +37,21 @@ pub struct User {
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 struct Options {
-    title_language: UserTitleLanguage,
+    title_language: Option<UserTitleLanguage>,
+    #[serde(default)]
     display_adult_content: bool,
+    #[serde(default)]
     airing_notifications: bool,
     profile_color: Color,
-    notifications_options: Vec<NotificationOption>,
-    timezone: String,
+    notifications_options: Option<Vec<NotificationOption>>,
+    timezone: Option<String>,
+    #[serde(default)]
     activity_merge_time: i32,
+    #[serde(default)]
     staff_name_language: UserStaffNameLanguage,
+    #[serde(default)]
     restrict_messages_to_following: bool,
-    disabled_list_activity: Vec<ListActivityOption>,
+    disabled_list_activity: Option<Vec<ListActivityOption>>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
@@ -94,7 +101,6 @@ pub struct MediaListTypeOptions {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
-#[serde(rename_all(deserialize = "camelCase"))]
 pub struct Favourites {
     anime: Vec<Anime>,
     manga: Vec<Manga>,
@@ -114,12 +120,12 @@ pub struct UserStatisticTypes {
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct UserStatistics {
     count: i32,
-    standard_deviation: f32,
+    standard_deviation: Option<f32>,
     minutes_watched: Option<i32>,
     episodes_watched: Option<i32>,
     chapters_read: Option<i32>,
     volumes_read: Option<i32>,
-    formats: Vec<UserFormatStatistic>,
+    formats: Option<Vec<UserFormatStatistic>>,
     statuses: Vec<UserStatusStatistic>,
 }
 
@@ -129,6 +135,7 @@ pub struct UserFormatStatistic {
     count: i32,
     minutes_watched: Option<i32>,
     chapters_read: Option<i32>,
+    #[serde(default)]
     media_ids: Vec<i32>,
     format: Format,
 }
@@ -139,6 +146,7 @@ pub struct UserStatusStatistic {
     count: i32,
     minutes_watched: Option<i32>,
     chapters_read: Option<i32>,
+    #[serde(default)]
     media_ids: Vec<i32>,
     status: Status,
 }
