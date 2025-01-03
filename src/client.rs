@@ -322,12 +322,12 @@ impl Client {
             let mut animes = Vec::new();
 
             for media in medias.iter() {
-                let mut anime = crate::models::Anime::default();
-                anime.id = media["id"].as_i64().unwrap();
-                anime.title = crate::models::Title::deserialize(&media["title"]).unwrap();
-                anime.url = media["siteUrl"].as_str().unwrap().to_string();
-
-                animes.push(anime);
+                animes.push(crate::models::Anime {
+                    id: media["id"].as_i64().unwrap(),
+                    title: crate::models::Title::deserialize(&media["title"]).unwrap(),
+                    url: media["siteUrl"].as_str().unwrap().to_string(),
+                    ..Default::default()
+                });
             }
 
             return Some(animes);
@@ -376,12 +376,12 @@ impl Client {
             let mut mangas = Vec::new();
 
             for media in medias.iter() {
-                let mut manga = crate::models::Manga::default();
-                manga.id = media["id"].as_i64().unwrap();
-                manga.title = crate::models::Title::deserialize(&media["title"]).unwrap();
-                manga.url = media["siteUrl"].as_str().unwrap().to_string();
-
-                mangas.push(manga);
+                mangas.push(crate::models::Manga {
+                    id: media["id"].as_i64().unwrap(),
+                    title: crate::models::Title::deserialize(&media["title"]).unwrap(),
+                    url: media["siteUrl"].as_str().unwrap().to_string(),
+                    ..Default::default()
+                });
             }
 
             return Some(mangas);
@@ -430,12 +430,12 @@ impl Client {
             let mut vec = Vec::new();
 
             for user in users.iter() {
-                let mut u = crate::models::User::default();
-                u.id = user["id"].as_i64().unwrap() as i32;
-                u.name = user["name"].as_str().unwrap().to_string();
-                u.avatar = crate::models::Image::deserialize(&user["avatar"]).ok();
-
-                vec.push(u);
+                vec.push(crate::models::User {
+                    id: user["id"].as_i64().unwrap() as i32,
+                    name: user["name"].as_str().unwrap().to_string(),
+                    avatar: crate::models::Image::deserialize(&user["avatar"]).ok(),
+                    ..Default::default()
+                });
             }
 
             return Some(vec);
