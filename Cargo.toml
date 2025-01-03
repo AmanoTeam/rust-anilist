@@ -1,7 +1,7 @@
 [package]
 name = "rust-anilist"
 version = "0.1.2"
-authors = ["Andriel Ferreira <andrielkogama2@gmail.com>"]
+authors = ["Andriel Ferreira <andrielfr@proton.me>"]
 license = "MTI"
 description = """
 Just an Anilist wrapper.
@@ -13,7 +13,7 @@ categories = ["api-binding"]
 edition = "2021"
 
 [dependencies]
-tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1", features = ["macros"] }
 serde = { version = "1", features = ["derive"] }
 chrono = "*"
 reqwest = "*"
