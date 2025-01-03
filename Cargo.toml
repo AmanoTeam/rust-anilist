@@ -11,7 +11,7 @@ readme = "README.md"
 homepage = "https://github.com/AmanoTeam/rust-anilist"
 repository = "https://github.com/AmanoTeam/rust-anilist"
 keywords = ["api", "anilist", "anilist-api"]
-categories = ["async", "api-binding"]
+categories = ["api-bindings"]
 edition = "2021"
 exclude = [".github/*", ".rusty-hook.toml"]
 
