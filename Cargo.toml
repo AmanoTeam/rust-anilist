@@ -6,8 +6,8 @@ license = "MTI"
 description = """
 Just an Anilist wrapper.
 """
-homepage = "https://github.com/AndrielFR/rust-anilist"
-repository = "https://github.com/AndrielFR/rust-anilist"
+homepage = "https://github.com/AmanoTeam/rust-anilist"
+repository = "https://github.com/AmanoTeam/rust-anilist"
 keywords = ["api", "anilist", "anilist-api"]
 categories = ["api-binding"]
 edition = "2021"
