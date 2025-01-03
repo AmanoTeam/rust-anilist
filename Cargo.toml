@@ -2,14 +2,16 @@
 name = "rust-anilist"
 version = "0.1.2"
 authors = ["Andriel Ferreira <andrielfr@proton.me>"]
-license = "MTI"
+license = "MIT"
 description = """
-Just an Anilist wrapper.
+A Rust wrapper for the Anilist API, providing asynchronous methods to interact
+with various entities like Anime, Manga, User, Person, and Character.
 """
+readme = "README.md"
 homepage = "https://github.com/AmanoTeam/rust-anilist"
 repository = "https://github.com/AmanoTeam/rust-anilist"
 keywords = ["api", "anilist", "anilist-api"]
-categories = ["api-binding"]
+categories = ["async", "api-binding"]
 edition = "2021"
 
 [dependencies]
