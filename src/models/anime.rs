@@ -168,6 +168,17 @@ impl Anime {
     /// # Panics
     ///
     /// Panics if the anime is already fully loaded.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::Anime, Result};
+    /// #
+    /// # async fn f(anime: Anime) -> Result<()> {
+    /// let anime = anime.load_full().await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
             self.client.get_anime(self.id).await
@@ -192,13 +203,13 @@ impl Anime {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct AiringSchedule {
     /// The ID of the airing schedule.
-    id: i64,
+    pub id: i64,
     /// The airing date.
     #[serde(rename = "airingAt")]
-    at: i64,
+    pub at: i64,
     /// Time until the airing.
     #[serde(rename = "timeUntilAiring")]
-    time_until: i64,
+    pub time_until: i64,
     /// The airing episode.
-    episode: i64,
+    pub episode: i64,
 }

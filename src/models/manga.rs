@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+//! This module contains the `Manga` struct and its related types.
+
 use serde::{Deserialize, Serialize};
 
 use super::{
@@ -152,6 +154,17 @@ impl Manga {
     /// # Panics
     ///
     /// Panics if the manga is already fully loaded.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::Manga, Result};
+    /// #
+    /// # async fn f(manga: Manga) -> Result<()> {
+    /// let manga = manga.load_full().await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
             self.client.get_manga(self.id).await

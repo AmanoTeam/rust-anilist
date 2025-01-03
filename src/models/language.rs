@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+//! This module contains the `Language` enum.
+
 use serde::{Deserialize, Serialize};
 
 /// Represents a language with various options.

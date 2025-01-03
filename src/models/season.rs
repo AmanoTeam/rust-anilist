@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT↴↴
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>↴↴
 
+//! This module contains the `Season` enum.
+
 use serde::{Deserialize, Serialize};
 
 /// Represents the four seasons of the year.
@@ -35,6 +37,7 @@ impl Season {
     /// # Example
     ///
     /// ```
+    /// # use rust_anilist::models::Season;
     /// let season = Season::Winter;
     /// assert_eq!(season.name(), "Winter");
     /// ```

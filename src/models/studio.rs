@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+//! This module contains the `Studio` struct.
+
 use serde::{Deserialize, Serialize};
 
 use crate::Result;
@@ -44,14 +46,19 @@ impl Studio {
     ///
     /// # Type Parameters
     ///
-    /// * `T` - The type of the media data to be returned.
+    /// * `T` - The type of the media to be returned.
     ///
     /// # Example
     ///
-    /// ```
+    /// ```no_run
+    /// # use rust_anilist::{models::{Anime, Studio}, Result};
+    /// #
+    /// # async fn f(studio: Studio) -> Result<()> {
     /// let animes = studio.get_medias::<Anime>().await?;
+    /// # Ok(())
+    /// # }
     /// ```
-    pub async fn get_medias<T>() -> Result<T> {
+    pub async fn get_medias<T>(&self) -> Result<T> {
         unimplemented!()
     }
 }

@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+//! This module contains the `Date` struct.
+
 use chrono::{Datelike, NaiveDate};
 use serde::{Deserialize, Serialize};
 
-/// A date.
+/// Represents a date.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Date {
@@ -50,7 +52,8 @@ impl Date {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```no_run
+    /// # use rust_anilist::models::Date;
     /// let date = Date { year: Some(2023), month: Some(10), day: Some(5) };
     /// let formatted = date.format("{yyyy}-{mm}-{dd}");
     /// assert_eq!(formatted, "2023-10-05");

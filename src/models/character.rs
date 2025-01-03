@@ -1,15 +1,11 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
-use serde::Deserialize;
-use serde::Serialize;
+//! This module contains the `Character` struct and its related types.
 
-use crate::models::Date;
-use crate::models::Gender;
-use crate::models::Image;
-use crate::models::Name;
-use crate::models::Person;
+use serde::{Deserialize, Serialize};
 
+use super::{Date, Gender, Image, Name, Person};
 use crate::{Client, Result};
 
 /// Represents a character.
@@ -66,6 +62,16 @@ impl Character {
     /// # Panics
     ///
     /// Panics if the character is already fully loaded.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::Character, Result};
+    /// #
+    /// # async fn f(character: Character) -> Result<()> {
+    /// let character = character.load_full().await?;
+    /// # Ok(())
+    /// # }
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
             self.client.get_character(self.id).await
@@ -82,7 +88,18 @@ impl Character {
     ///
     /// # Type Parameters
     ///
-    /// * `T` - The type of the media.
+    /// * `T` - The type of the media to be returned.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::{Manga, Character}, Result};
+    /// #
+    /// # async fn f(character: Character) -> Result<()> {
+    /// let char_mangas = character.get_medias::<Manga>().await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn get_medias<T>(&self) -> Result<T> {
         unimplemented!()
     }

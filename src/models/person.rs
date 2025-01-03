@@ -70,6 +70,17 @@ impl Person {
     /// # Panics
     ///
     /// Panics if the person is already fully loaded.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::Person, Result};
+    /// #
+    /// # async fn f(person: Person) -> Result<()> {
+    /// let person = person.load_full().await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
             self.client.get_person(self.id).await
@@ -86,8 +97,19 @@ impl Person {
     ///
     /// # Type Parameters
     ///
-    /// * `T` - The type of the media.
-    pub async fn get_medias<T>() -> Result<T> {
+    /// * `T` - The type of the media to be returned.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::{Anime, Person}, Result};
+    /// #
+    /// # async fn f(person: Person) -> Result<()> {
+    /// let animes = person.get_medias::<Anime>().await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn get_medias<T>(&self) -> Result<T> {
         unimplemented!()
     }
 
@@ -103,8 +125,19 @@ impl Person {
     ///
     /// # Type Parameters
     ///
-    /// * `T` - The type of the media.
-    pub async fn get_character_medias<T>(_character_id: i64) -> Result<T> {
+    /// * `T` - The type of the media to be returned.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rust_anilist::{models::{Manga, Person}, Result};
+    /// #
+    /// # async fn f(person: Person) -> Result<()> {
+    /// let char_mangas = person.get_character_medias::<Manga>(1).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn get_character_medias<T>(&self, _character_id: i64) -> Result<T> {
         unimplemented!()
     }
 }

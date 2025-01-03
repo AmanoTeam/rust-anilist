@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+//! This module contains the `Image` struct.
+
 use serde::{Deserialize, Serialize};
 
 /// Represents an image with different sizes.

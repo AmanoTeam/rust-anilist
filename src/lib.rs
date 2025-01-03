@@ -1,16 +1,13 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
-// #![deny(missing_docs)]
-#![allow(clippy::let_and_return)] // TODO: Remove this
-#![allow(dead_code)] // TODO: Remove this
-#![allow(unused_mut)] // TODO: Remove this
-#![allow(unused_variables)] // TODO: Remove this
+//! This crate provides a Rust library for interacting with the AniList API.
 
-#[macro_use]
-pub mod models;
+#![deny(missing_docs)]
+
 mod client;
 mod error;
+pub mod models;
 
 pub use client::Client;
 pub use error::{Error, Result};
