@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
-use std::io::Write;
 use std::time::Duration;
+
+use serde::Deserialize;
 
 use crate::models::{Anime, Character, Manga, Person, User};
 use crate::Result;
@@ -281,20 +282,166 @@ impl Client {
         }
     }
 
-    /// Search for anime.
+    /// Search for animes.
     ///
     /// # Arguments
     ///
+    /// * `title` - The title of the anime to search.
+    /// * `page` - The page number to get.
+    /// * `limit` - The number of animes to get per page.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let animes = client.search_anime("Naruto", 1, 10).await.unwrap();
+    ///
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn search_anime(
         &self,
-        variables: serde_json::Value,
+        title: &str,
+        page: u16,
+        limit: u16,
     ) -> Option<Vec<crate::models::Anime>> {
         let result = self
-            .request(MediaType::Anime, Action::Search, variables)
+            .request(
+                MediaType::Anime,
+                Action::Search,
+                serde_json::json!({ "search": title, "page": page, "per_page": limit, }),
+            )
             .await
             .unwrap();
-        let mut _models = Vec::<crate::models::Anime>::new();
-        unimplemented!()
+
+        if let Some(medias) = result["data"]["Page"]["media"].as_array() {
+            let mut animes = Vec::new();
+
+            for media in medias.iter() {
+                let mut anime = crate::models::Anime::default();
+                anime.id = media["id"].as_i64().unwrap();
+                anime.title = crate::models::Title::deserialize(&media["title"]).unwrap();
+                anime.url = media["siteUrl"].as_str().unwrap().to_string();
+
+                animes.push(anime);
+            }
+
+            return Some(animes);
+        }
+
+        None
+    }
+
+    /// Search for mangas.
+    ///
+    /// # Arguments
+    ///
+    /// * `title` - The title of the manga to search.
+    /// * `page` - The page number to get.
+    /// * `limit` - The number of mangas to get per page.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let mangas = client.search_manga("Naruto", 1, 10).await.unwrap();
+    ///
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn search_manga(
+        &self,
+        title: &str,
+        page: u16,
+        limit: u16,
+    ) -> Option<Vec<crate::models::Manga>> {
+        let result = self
+            .request(
+                MediaType::Manga,
+                Action::Search,
+                serde_json::json!({ "search": title, "page": page, "per_page": limit, }),
+            )
+            .await
+            .unwrap();
+
+        if let Some(medias) = result["data"]["Page"]["media"].as_array() {
+            let mut mangas = Vec::new();
+
+            for media in medias.iter() {
+                let mut manga = crate::models::Manga::default();
+                manga.id = media["id"].as_i64().unwrap();
+                manga.title = crate::models::Title::deserialize(&media["title"]).unwrap();
+                manga.url = media["siteUrl"].as_str().unwrap().to_string();
+
+                mangas.push(manga);
+            }
+
+            return Some(mangas);
+        }
+
+        None
+    }
+
+    /// Search for users.
+    ///
+    /// # Arguments
+    ///
+    /// * `name` - The name of the user to search.
+    /// * `page` - The page number to get.
+    /// * `limit` - The number of users to get per page.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # async fn f(client: rust_anilist::Client) -> rust_anilist::Result<()> {
+    /// let users = client.search_user("andrielfr", 1, 10).await.unwrap();
+    ///
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn search_user(
+        &self,
+        name: &str,
+        page: u16,
+        limit: u16,
+    ) -> Option<Vec<crate::models::User>> {
+        let result = self
+            .request(
+                MediaType::User,
+                Action::Search,
+                serde_json::json!({ "search": name, "page": page, "per_page": limit, }),
+            )
+            .await
+            .unwrap();
+
+        if let Some(users) = result["data"]["Page"]["users"].as_array() {
+            let mut vec = Vec::new();
+
+            for user in users.iter() {
+                let mut u = crate::models::User::default();
+                u.id = user["id"].as_i64().unwrap() as i32;
+                u.name = user["name"].as_str().unwrap().to_string();
+                u.avatar = crate::models::Image::deserialize(&user["avatar"]).ok();
+
+                vec.push(u);
+            }
+
+            return Some(vec);
+        }
+
+        None
     }
 
     /// Send a request to the AniList API.
@@ -359,12 +506,12 @@ impl Client {
             }
             Action::Search => {
                 match media_type {
-                    // MediaType::Anime => include_str!("../queries/search_anime.graphql").to_string(),
-                    // MediaType::Manga => include_str!("../queries/search_manga.graphql").to_string(),
+                    MediaType::Anime => include_str!("../queries/search_anime.graphql").to_string(),
+                    MediaType::Manga => include_str!("../queries/search_manga.graphql").to_string(),
                     // MediaType::Character => {
                     //     include_str!("../queries/search_character.graphql").to_string()
                     // }
-                    // MediaType::User => include_str!("../queries/search_user.graphql").to_string(),
+                    MediaType::User => include_str!("../queries/search_user.graphql").to_string(),
                     // MediaType::Person => {
                     //     include_str!("../queries/search_person.graphql").to_string()
                     // }
