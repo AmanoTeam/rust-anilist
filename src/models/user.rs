@@ -6,8 +6,36 @@ use serde::{Deserialize, Serialize};
 use super::{
     Anime, Character, Color, Format, Image, Manga, NotificationOption, Person, Status, Studio,
 };
+use crate::{Client, Result};
 
-/// A user.
+/// Represents a user with various attributes.
+///
+/// The `User` struct contains detailed information about a user,
+/// including their ID, name, about section, avatar, banner, donator
+/// status, favourites, follow status, media list options, site URL,
+/// statistics, notification count, and timestamps for creation and
+/// updates.
+///
+/// # Fields
+///
+/// * `id` - The ID of the user.
+/// * `name` - The name of the user.
+/// * `about` - An optional about section for the user.
+/// * `avatar` - An optional avatar image for the user.
+/// * `banner` - An optional banner image for the user.
+/// * `donator_badge` - The donator badge of the user.
+/// * `donator_tier` - The donator tier of the user.
+/// * `favourites` - The user's favourites.
+/// * `is_blocked` - An optional boolean indicating if the user is blocked.
+/// * `is_follower` - An optional boolean indicating if the user is a follower.
+/// * `is_following` - An optional boolean indicating if the user is following someone.
+/// * `media_list_options` - Optional media list options for the user.
+/// * `options` - Optional additional options for the user.
+/// * `url` - The site URL of the user.
+/// * `statistics` - The user's statistics.
+/// * `unread_notification_count` - An optional count of unread notifications.
+/// * `created_at` - The timestamp when the user was created.
+/// * `updated_at` - The timestamp when the user was last updated.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct User {
@@ -49,6 +77,32 @@ pub struct User {
     pub created_at: i64,
     /// The updated date of the user.
     pub updated_at: i64,
+
+    /// The client used to fetch additional data.
+    #[serde(skip)]
+    pub(crate) client: Client,
+    /// Whether the person's data is fully loaded.
+    #[serde(default)]
+    pub(crate) is_full_loaded: bool,
+}
+
+impl User {
+    /// Loads the full details of the user.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the user details cannot be loaded.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the user is already fully loaded.
+    pub async fn load_full(self) -> Result<Self> {
+        if !self.is_full_loaded {
+            self.client.get_user(self.id).await
+        } else {
+            panic!("This user is already full loaded")
+        }
+    }
 }
 
 /// The options of a user.

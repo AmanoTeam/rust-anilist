@@ -25,7 +25,7 @@ mod title;
 mod user;
 
 pub use anime::Anime;
-pub use character::{Character, Role as CharacterRole};
+pub use character::{Character, CharacterRole};
 pub use color::Color;
 pub use cover::Cover;
 pub use date::Date;
@@ -33,14 +33,13 @@ pub use format::Format;
 pub use gender::Gender;
 pub use image::Image;
 pub use language::Language;
-pub use link::{Link, Type as LinkType};
+pub use link::{Link, LinkType};
 pub use manga::Manga;
 pub use name::Name;
-pub use notification::{Notification, NotificationOption, Type as NotificationType};
+pub use notification::{Notification, NotificationOption, NotificationType};
 pub use person::Person;
-pub use relation::{Relation, Type as RelationType};
+pub use relation::{Relation, RelationType};
 pub use season::Season;
-use serde::{Deserialize, Serialize};
 pub use source::Source;
 pub use status::Status;
 pub use studio::Studio;
@@ -48,10 +47,37 @@ pub use tag::Tag;
 pub use title::Title;
 pub use user::User;
 
-#[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
+use serde::{Deserialize, Serialize};
+
+/// Represents different types of media.
+///
+/// The `MediaType` enum defines various types of media, such as anime,
+/// manga, character, user, person, studio, and an unknown type.
+///
+/// # Variants
+///
+/// * `Anime` - Represents an anime.
+/// * `Manga` - Represents a manga.
+/// * `Character` - Represents a character.
+/// * `User` - Represents a user.
+/// * `Person` - Represents a person.
+/// * `Studio` - Represents a studio.
+/// * `Unknown` - Represents an unknown type of media.
+#[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 pub enum MediaType {
+    /// An anime.
     Anime,
+    /// A manga.
     Manga,
+    /// A character.
+    Character,
+    /// An user.
+    User,
+    /// A person.
+    Person,
+    /// A studio.
+    Studio,
+    /// Unknown type.
     #[default]
     Unknown,
 }

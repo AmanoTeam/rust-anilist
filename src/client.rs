@@ -1,14 +1,19 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
+use serde::Deserialize;
 use std::time::Duration;
 
-use serde::Deserialize;
+use crate::{
+    models::{Anime, Character, Image, Manga, MediaType, Person, Title, User},
+    Result,
+};
 
-use crate::models::{Anime, Character, Manga, Person, User};
-use crate::Result;
-
-#[derive(Clone)]
+/// Represents a client for interacting with an API.
+///
+/// The `Client` struct contains the necessary configuration for making
+/// requests to an API, including the API token and the timeout duration.
+#[derive(Clone, Debug, PartialEq)]
 pub struct Client {
     /// The API token to use for requests.
     api_token: Option<String>,
@@ -17,15 +22,60 @@ pub struct Client {
 }
 
 impl Client {
-    /// Set the API token.
-    pub fn api_token(mut self, token: &str) -> Self {
-        self.api_token = Some(token.to_string());
+    /// Creates a new client instance with the specified timeout duration.
+    ///
+    /// This method initializes a new `Client` instance with the provided
+    /// timeout duration.
+    ///
+    /// # Arguments
+    ///
+    /// * `timeout` - The timeout duration for requests, in seconds.
+    pub fn with_timeout(timeout: u64) -> Self {
+        Self {
+            api_token: None,
+            timeout,
+        }
+    }
+
+    /// Creates a new client instance with the specified API token.
+    ///
+    /// This method initializes a new `Client` instance with the provided
+    /// API token and a default timeout duration of 20 seconds.
+    ///
+    /// # Arguments
+    ///
+    /// * `token` - A string slice that holds the API token.
+    pub fn with_api_token(token: &str) -> Self {
+        Self {
+            api_token: Some(token.to_string()),
+            timeout: 20,
+        }
+    }
+
+    /// Sets the timeout duration for the client.
+    ///
+    /// This method allows you to set the timeout duration for the client
+    /// in seconds. The timeout duration determines how long the client
+    /// will wait for a response before timing out.
+    ///
+    /// # Arguments
+    ///
+    /// * `seconds` - The timeout duration in seconds.
+    pub fn timeout(mut self, seconds: u64) -> Self {
+        self.timeout = seconds;
         self
     }
 
-    /// Set the timeout for the requests (in seconds).
-    pub fn timeout(mut self, seconds: u64) -> Self {
-        self.timeout = seconds;
+    /// Sets the API token for the client.
+    ///
+    /// This method allows you to set the API token for the client, which
+    /// will be used for authenticating API requests.
+    ///
+    /// # Arguments
+    ///
+    /// * `token` - A string slice that holds the API token.
+    pub fn api_token(mut self, token: &str) -> Self {
+        self.api_token = Some(token.to_string());
         self
     }
 
@@ -49,7 +99,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_anime(&self, id: i64) -> Result<crate::models::Anime> {
+    pub async fn get_anime(&self, id: i64) -> Result<Anime> {
         let data = self
             .request(
                 MediaType::Anime,
@@ -61,6 +111,7 @@ impl Client {
 
         match serde_json::from_str::<Anime>(&data["data"]["Media"].to_string()) {
             Ok(mut anime) => {
+                anime.client = self.clone();
                 anime.is_full_loaded = true;
 
                 Ok(anime)
@@ -89,7 +140,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_manga(&self, id: i64) -> Result<crate::models::Manga> {
+    pub async fn get_manga(&self, id: i64) -> Result<Manga> {
         let data = self
             .request(
                 MediaType::Manga,
@@ -101,6 +152,7 @@ impl Client {
 
         match serde_json::from_str::<Manga>(&data["data"]["Media"].to_string()) {
             Ok(mut manga) => {
+                manga.client = self.clone();
                 manga.is_full_loaded = true;
 
                 Ok(manga)
@@ -128,7 +180,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_character(&self, id: i64) -> Result<crate::models::Character> {
+    pub async fn get_character(&self, id: i64) -> Result<Character> {
         let data = self
             .request(
                 MediaType::Character,
@@ -140,6 +192,7 @@ impl Client {
 
         match serde_json::from_str::<Character>(&data["data"]["Character"].to_string()) {
             Ok(mut character) => {
+                character.client = self.clone();
                 character.is_full_loaded = true;
 
                 Ok(character)
@@ -167,7 +220,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_char(&self, id: i64) -> Result<crate::models::Character> {
+    pub async fn get_char(&self, id: i64) -> Result<Character> {
         self.get_character(id).await
     }
 
@@ -190,7 +243,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_user(&self, id: i64) -> Result<crate::models::User> {
+    pub async fn get_user(&self, id: i32) -> Result<User> {
         let data = self
             .request(
                 MediaType::User,
@@ -225,7 +278,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_user_by_name<N: ToString>(&self, name: N) -> Result<crate::models::User> {
+    pub async fn get_user_by_name<N: ToString>(&self, name: N) -> Result<User> {
         let name = name.to_string();
 
         let data = self
@@ -238,7 +291,12 @@ impl Client {
             .unwrap();
 
         match serde_json::from_str::<User>(&data["data"]["User"].to_string()) {
-            Ok(user) => Ok(user),
+            Ok(mut user) => {
+                user.client = self.clone();
+                user.is_full_loaded = true;
+
+                Ok(user)
+            }
             Err(e) => Err(crate::Error::ApiError(e.to_string())),
         }
     }
@@ -262,7 +320,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_person(&self, id: i64) -> Result<crate::models::Person> {
+    pub async fn get_person(&self, id: i64) -> Result<Person> {
         let data = self
             .request(
                 MediaType::Person,
@@ -274,6 +332,7 @@ impl Client {
 
         match serde_json::from_str::<Person>(&data["data"]["Staff"].to_string()) {
             Ok(mut person) => {
+                person.client = self.clone();
                 person.is_full_loaded = true;
 
                 Ok(person)
@@ -303,12 +362,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn search_anime(
-        &self,
-        title: &str,
-        page: u16,
-        limit: u16,
-    ) -> Option<Vec<crate::models::Anime>> {
+    pub async fn search_anime(&self, title: &str, page: u16, limit: u16) -> Option<Vec<Anime>> {
         let result = self
             .request(
                 MediaType::Anime,
@@ -322,10 +376,12 @@ impl Client {
             let mut animes = Vec::new();
 
             for media in medias.iter() {
-                animes.push(crate::models::Anime {
+                animes.push(Anime {
                     id: media["id"].as_i64().unwrap(),
-                    title: crate::models::Title::deserialize(&media["title"]).unwrap(),
+                    title: Title::deserialize(&media["title"]).unwrap(),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
+
+                    client: self.clone(),
                     ..Default::default()
                 });
             }
@@ -357,12 +413,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn search_manga(
-        &self,
-        title: &str,
-        page: u16,
-        limit: u16,
-    ) -> Option<Vec<crate::models::Manga>> {
+    pub async fn search_manga(&self, title: &str, page: u16, limit: u16) -> Option<Vec<Manga>> {
         let result = self
             .request(
                 MediaType::Manga,
@@ -376,10 +427,12 @@ impl Client {
             let mut mangas = Vec::new();
 
             for media in medias.iter() {
-                mangas.push(crate::models::Manga {
+                mangas.push(Manga {
                     id: media["id"].as_i64().unwrap(),
-                    title: crate::models::Title::deserialize(&media["title"]).unwrap(),
+                    title: Title::deserialize(&media["title"]).unwrap(),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
+
+                    client: self.clone(),
                     ..Default::default()
                 });
             }
@@ -411,12 +464,7 @@ impl Client {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn search_user(
-        &self,
-        name: &str,
-        page: u16,
-        limit: u16,
-    ) -> Option<Vec<crate::models::User>> {
+    pub async fn search_user(&self, name: &str, page: u16, limit: u16) -> Option<Vec<User>> {
         let result = self
             .request(
                 MediaType::User,
@@ -430,10 +478,12 @@ impl Client {
             let mut vec = Vec::new();
 
             for user in users.iter() {
-                vec.push(crate::models::User {
+                vec.push(User {
                     id: user["id"].as_i64().unwrap() as i32,
                     name: user["name"].as_str().unwrap().to_string(),
-                    avatar: crate::models::Image::deserialize(&user["avatar"]).ok(),
+                    avatar: Image::deserialize(&user["avatar"]).ok(),
+
+                    client: self.clone(),
                     ..Default::default()
                 });
             }
@@ -475,7 +525,7 @@ impl Client {
         }
 
         let response = body.send().await?.text().await?;
-        let result: serde_json::Value = serde_json::from_str(&response).unwrap();
+        let result = serde_json::from_str::<serde_json::Value>(&response).unwrap();
 
         Ok(result)
     }
@@ -485,6 +535,7 @@ impl Client {
     /// # Arguments
     ///
     /// * `media_type` - The type of media to get the query for.
+    /// * `action` - The action to perform.
     ///
     /// # Errors
     ///
@@ -534,26 +585,18 @@ impl Default for Client {
     }
 }
 
-/// The action to perform.
+/// Represents an action that can be performed by the client.
+///
+/// The `Action` enum defines various actions that the client can perform,
+/// such as getting media by ID or searching for media.
+///
+/// # Variants
+///
+/// * `Get` - Represents the action of getting media by ID.
+/// * `Search` - Represents the action of searching for media.
 enum Action {
     /// Get media by ID.
     Get,
     /// Search for media.
     Search,
-}
-
-/// The type of media to request.
-enum MediaType {
-    /// An anime.
-    Anime,
-    /// A manga.
-    Manga,
-    /// A character.
-    Character,
-    /// An user.
-    User,
-    /// A person.
-    Person,
-    /// A studio.
-    Studio,
 }

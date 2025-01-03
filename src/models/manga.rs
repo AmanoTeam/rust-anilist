@@ -8,7 +8,51 @@ use super::{
 };
 use crate::{Client, Result};
 
-/// A manga.
+/// Represents a manga with various attributes.
+///
+/// The `Manga` struct contains detailed information about a manga,
+/// including its ID, title, format, status, description, dates,
+/// chapters, volumes, country of origin, licensing status, source,
+/// hashtags, images, genres, synonyms, scores, popularity, tags,
+/// relations, characters, staff, studios, and other metadata.
+///
+/// # Fields
+///
+/// * `id` - The ID of the manga.
+/// * `id_mal` - The ID of the manga on MAL (MyAnimeList).
+/// * `title` - The title of the manga.
+/// * `format` - The format of the manga (e.g., manga, novel).
+/// * `status` - The status of the manga (e.g., publishing, completed).
+/// * `description` - The description of the manga.
+/// * `start_date` - The start date of the manga.
+/// * `end_date` - The end date of the manga.
+/// * `chapters` - The number of chapters of the manga.
+/// * `volumes` - The number of volumes of the manga.
+/// * `country_of_origin` - The country of origin of the manga.
+/// * `is_licensed` - Whether the manga is licensed or not.
+/// * `source` - The source of the manga (e.g., original, adaptation).
+/// * `hashtag` - The hashtag of the manga.
+/// * `updated_at` - The updated date of the manga.
+/// * `cover` - The cover image of the manga.
+/// * `banner` - The banner image of the manga.
+/// * `genres` - The genres of the manga.
+/// * `synonyms` - The synonyms of the manga.
+/// * `average_score` - The average score of the manga.
+/// * `mean_score` - The mean score of the manga.
+/// * `popularity` - The popularity of the manga.
+/// * `is_locked` - Whether the manga is locked or not.
+/// * `trending` - The trending of the manga.
+/// * `favourites` - The number of favourites of the manga.
+/// * `tags` - The tags of the manga.
+/// * `relations` - The relations of the manga.
+/// * `characters` - The characters of the manga.
+/// * `staff` - The staff of the manga.
+/// * `studios` - The studios of the manga.
+/// * `is_favourite` - Whether the manga is favourite or not.
+/// * `is_favourite_blocked` - Whether the manga is favourite blocked or not.
+/// * `is_adult` - Whether the manga is adult or not.
+/// * `external_links` - The external links of the manga.
+/// * `url` - The site URL of the manga.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Manga {
@@ -89,22 +133,28 @@ pub struct Manga {
     /// The site URL of the manga.
     #[serde(rename = "siteUrl")]
     pub url: String,
+
+    /// The client used to fetch additional data.
     #[serde(skip)]
+    pub(crate) client: Client,
+    /// Whether the person's data is fully loaded.
+    #[serde(default)]
     pub(crate) is_full_loaded: bool,
 }
 
 impl Manga {
-    /// Load fully the manga.
+    /// Loads the full details of the manga.
     ///
     /// # Errors
     ///
-    /// Returns an error if the manga is already full loaded.
+    /// Returns an error if the manga details cannot be loaded.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the manga is already fully loaded.
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
-            let mut manga = Client::default().get_manga(self.id).await.unwrap();
-            manga.is_full_loaded = true;
-
-            Ok(manga)
+            self.client.get_manga(self.id).await
         } else {
             panic!("This manga is already full loaded")
         }

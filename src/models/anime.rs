@@ -9,7 +9,56 @@ use super::{
 };
 use crate::{Client, Result};
 
-/// An anime.
+/// Represents an anime with various attributes.
+///
+/// The `Anime` struct contains detailed information about an anime,
+/// including its ID, title, format, status, description, dates, season,
+/// episodes, duration, country of origin, licensing status, source,
+/// hashtags, images, genres, synonyms, scores, popularity, tags,
+/// relations, characters, staff, studios, and other metadata.
+///
+/// # Fields
+///
+/// * `id` - The ID of the anime.
+/// * `id_mal` - The ID of the anime on MAL (MyAnimeList).
+/// * `title` - The title of the anime.
+/// * `format` - The format of the anime (e.g., TV, movie).
+/// * `status` - The status of the anime (e.g., airing, completed).
+/// * `description` - The description of the anime.
+/// * `start_date` - The start date of the anime.
+/// * `end_date` - The end date of the anime.
+/// * `season` - The season of the anime.
+/// * `season_year` - The year of the season of the anime.
+/// * `season_int` - The integer representation of the season of the anime.
+/// * `episodes` - The number of episodes of the anime.
+/// * `duration` - The duration of the episodes of the anime.
+/// * `country_of_origin` - The country of origin of the anime.
+/// * `is_licensed` - Whether the anime is licensed or not.
+/// * `source` - The source of the anime (e.g., manga, light novel).
+/// * `hashtag` - The hashtag of the anime.
+/// * `updated_at` - The updated date of the anime.
+/// * `cover` - The cover image of the anime.
+/// * `banner` - The banner image of the anime.
+/// * `genres` - The genres of the anime.
+/// * `synonyms` - The synonyms of the anime.
+/// * `average_score` - The average score of the anime.
+/// * `mean_score` - The mean score of the anime.
+/// * `popularity` - The popularity of the anime.
+/// * `is_locked` - Whether the anime is locked or not.
+/// * `trending` - The trending of the anime.
+/// * `favourites` - The number of favourites of the anime.
+/// * `tags` - The tags of the anime.
+/// * `relations` - The relations of the anime.
+/// * `characters` - The characters of the anime.
+/// * `staff` - The staff of the anime.
+/// * `studios` - The studios of the anime.
+/// * `is_favourite` - Whether the anime is favourite or not.
+/// * `is_favourite_blocked` - Whether the anime is favourite blocked or not.
+/// * `is_adult` - Whether the anime is adult or not.
+/// * `next_airing_episode` - The next airing episode of the anime.
+/// * `external_links` - The external links of the anime.
+/// * `streaming_episodes` - The streaming episodes of the anime.
+/// * `url` - The site URL of the anime.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Anime {
@@ -100,28 +149,46 @@ pub struct Anime {
     /// The site URL of the anime.
     #[serde(rename = "siteUrl")]
     pub url: String,
+
+    /// The client used to fetch additional data.
     #[serde(skip)]
+    pub(crate) client: Client,
+    /// Whether the person's data is fully loaded.
+    #[serde(default)]
     pub(crate) is_full_loaded: bool,
 }
 
 impl Anime {
-    /// Load fully the anime.
+    /// Loads the full details of the anime.
     ///
     /// # Errors
     ///
-    /// Returns an error if the anime is already full loaded.
+    /// Returns an error if the anime details cannot be loaded.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the anime is already fully loaded.
     pub async fn load_full(self) -> Result<Self> {
         if !self.is_full_loaded {
-            let mut anime = Client::default().get_anime(self.id).await.unwrap();
-            anime.is_full_loaded = true;
-
-            Ok(anime)
+            self.client.get_anime(self.id).await
         } else {
             panic!("This anime is already full loaded!")
         }
     }
 }
 
+/// Represents the airing schedule of an anime.
+///
+/// The `AiringSchedule` struct contains information about the airing
+/// schedule of an anime, including the ID, airing date, time until
+/// airing, and the episode number.
+///
+/// # Fields
+///
+/// * `id` - The ID of the airing schedule.
+/// * `at` - The airing date, represented as a Unix timestamp.
+/// * `time_until` - The time until the airing, represented in seconds.
+/// * `episode` - The episode number that is airing.
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct AiringSchedule {
     /// The ID of the airing schedule.
