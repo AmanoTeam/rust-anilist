@@ -47,7 +47,7 @@ impl Client {
     /// # Arguments
     ///
     /// * `token` - A string slice that holds the API token.
-    pub fn with_api_token(token: &str) -> Self {
+    pub fn with_token(token: &str) -> Self {
         Self {
             api_token: Some(token.to_string()),
             timeout: 20,
@@ -76,7 +76,7 @@ impl Client {
     /// # Arguments
     ///
     /// * `token` - A string slice that holds the API token.
-    pub fn api_token(mut self, token: &str) -> Self {
+    pub fn token(mut self, token: &str) -> Self {
         self.api_token = Some(token.to_string());
         self
     }
