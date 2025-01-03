@@ -13,6 +13,7 @@ repository = "https://github.com/AmanoTeam/rust-anilist"
 keywords = ["api", "anilist", "anilist-api"]
 categories = ["async", "api-binding"]
 edition = "2021"
+exclude = [".github/*", ".rusty-hook.toml"]
 
 [dependencies]
 tokio = { version = "1", features = ["macros"] }
