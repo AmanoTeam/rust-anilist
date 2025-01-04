@@ -14,3 +14,14 @@ pub struct Image {
     /// URL of the medium version of the image.
     pub medium: String,
 }
+
+impl Image {
+    /// Returns the URL of the largest version of the image.
+    pub fn largest(&self) -> &str {
+        if self.large.is_empty() {
+            &self.medium
+        } else {
+            &self.large
+        }
+    }
+}

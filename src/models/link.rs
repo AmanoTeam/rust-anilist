@@ -37,7 +37,7 @@ pub struct Link {
     pub is_disabled: Option<bool>,
 }
 
-/// The type of link.
+/// Represents the type of link.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "UPPERCASE"))]
 pub enum LinkType {

@@ -30,3 +30,18 @@ pub struct Cover {
     /// The color of the cover image.
     pub color: Option<Color>,
 }
+
+impl Cover {
+    /// Returns the URL of the largest version of the cover image.
+    pub fn largest(&self) -> Option<&str> {
+        if let Some(extra_large) = self.extra_large.as_deref() {
+            Some(extra_large)
+        } else if let Some(large) = self.large.as_deref() {
+            Some(large)
+        } else if let Some(medium) = self.medium.as_deref() {
+            Some(medium)
+        } else {
+            None
+        }
+    }
+}

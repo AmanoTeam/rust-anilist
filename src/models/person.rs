@@ -117,7 +117,7 @@ impl Person {
     ///
     /// # Arguments
     ///
-    /// * `_character_id` - The ID of the character whose media is to be retrieved.
+    /// * `character_id` - The ID of the character whose media is to be retrieved.
     ///
     /// # Errors
     ///
