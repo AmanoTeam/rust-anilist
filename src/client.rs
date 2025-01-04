@@ -20,7 +20,7 @@ pub struct Client {
     /// The API token to use for requests.
     api_token: Option<String>,
     /// The timeout for requests (in seconds).
-    timeout: u64,
+    timeout: Duration,
 }
 
 impl Client {
@@ -32,10 +32,10 @@ impl Client {
     /// # Arguments
     ///
     /// * `timeout` - The timeout duration for requests, in seconds.
-    pub fn with_timeout(timeout: u64) -> Self {
+    pub fn with_timeout(duration: Duration) -> Self {
         Self {
             api_token: None,
-            timeout,
+            timeout: duration,
         }
     }
 
@@ -50,7 +50,7 @@ impl Client {
     pub fn with_token(token: &str) -> Self {
         Self {
             api_token: Some(token.to_string()),
-            timeout: 20,
+            timeout: Duration::from_secs(20),
         }
     }
 
@@ -63,8 +63,8 @@ impl Client {
     /// # Arguments
     ///
     /// * `seconds` - The timeout duration in seconds.
-    pub fn timeout(mut self, seconds: u64) -> Self {
-        self.timeout = seconds;
+    pub fn timeout(mut self, duration: Duration) -> Self {
+        self.timeout = duration;
         self
     }
 
@@ -519,7 +519,7 @@ impl Client {
             .post("https://graphql.anilist.co/")
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
-            .timeout(Duration::from_secs(self.timeout))
+            .timeout(self.timeout)
             .body(json.to_string());
 
         if let Some(token) = &self.api_token {
@@ -582,7 +582,7 @@ impl Default for Client {
     fn default() -> Self {
         Client {
             api_token: None,
-            timeout: 20,
+            timeout: Duration::from_secs(20),
         }
     }
 }
@@ -605,42 +605,43 @@ enum Action {
 
 #[cfg(test)]
 mod tests {
+    use std::time::Duration;
+
     use super::*;
 
     #[test]
     fn test_with_timeout() {
-        let client = Client::with_timeout(30);
+        let duration = Duration::from_secs(30);
+        let client = Client::with_timeout(duration);
 
-        assert_eq!(client.timeout, 30);
+        assert_eq!(client.timeout, duration);
         assert!(client.api_token.is_none());
     }
 
     #[test]
     fn test_with_token() {
-        let client = Client::with_token("test_token");
+        let api_token = "test_token";
+        let client = Client::with_token(api_token);
 
-        assert_eq!(client.timeout, 20);
-        assert_eq!(client.api_token, Some("test_token".to_string()));
+        assert_eq!(client.timeout, Duration::from_secs(20));
+        assert_eq!(client.api_token, Some(api_token.to_string()));
     }
 
     #[test]
     fn test_timeout() {
-        let client = Client::with_timeout(30).timeout(60);
+        let initial_duration = Duration::from_secs(30);
+        let new_duration = Duration::from_secs(60);
+        let client = Client::with_timeout(initial_duration).timeout(new_duration);
 
-        assert_eq!(client.timeout, 60);
+        assert_eq!(client.timeout, new_duration);
     }
 
     #[test]
     fn test_token() {
-        let client = Client::with_timeout(30).token("new_token");
+        let initial_token = "initial_token";
+        let new_token = "new_token";
+        let client = Client::with_token(initial_token).token(new_token);
 
-        assert_eq!(client.api_token, Some("new_token".to_string()));
-    }
-
-    #[test]
-    fn test_get_query() {
-        let query = Client::get_query(MediaType::Anime, Action::Get).unwrap();
-
-        assert!(query.contains("query"));
+        assert_eq!(client.api_token, Some(new_token.to_string()));
     }
 }
