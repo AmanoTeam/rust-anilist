@@ -89,3 +89,57 @@ impl std::fmt::Display for Color {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_hex_with_hex_color() {
+        let color = Color::Hex("#FF5733".to_string());
+
+        assert_eq!(color.hex(), Some("#FF5733"));
+    }
+
+    #[test]
+    fn test_hex_with_predefined_color() {
+        let color = Color::Blue;
+
+        assert_eq!(color.hex(), None);
+    }
+
+    #[test]
+    fn test_from_str_predefined_colors() {
+        assert_eq!(Color::from("blue"), Color::Blue);
+        assert_eq!(Color::from("PURPLE"), Color::Purple);
+        assert_eq!(Color::from("Pink"), Color::Pink);
+        assert_eq!(Color::from("orange"), Color::Orange);
+        assert_eq!(Color::from("RED"), Color::Red);
+        assert_eq!(Color::from("green"), Color::Green);
+        assert_eq!(Color::from("gray"), Color::Gray);
+    }
+
+    #[test]
+    fn test_from_str_hex_color() {
+        assert_eq!(Color::from("#FF5733"), Color::Hex("#FF5733".to_string()));
+    }
+
+    #[test]
+    fn test_from_string_predefined_colors() {
+        assert_eq!(Color::from("blue".to_string()), Color::Blue);
+        assert_eq!(Color::from("PURPLE".to_string()), Color::Purple);
+        assert_eq!(Color::from("Pink".to_string()), Color::Pink);
+        assert_eq!(Color::from("orange".to_string()), Color::Orange);
+        assert_eq!(Color::from("RED".to_string()), Color::Red);
+        assert_eq!(Color::from("green".to_string()), Color::Green);
+        assert_eq!(Color::from("gray".to_string()), Color::Gray);
+    }
+
+    #[test]
+    fn test_from_string_hex_color() {
+        assert_eq!(
+            Color::from("#FF5733".to_string()),
+            Color::Hex("#FF5733".to_string())
+        );
+    }
+}

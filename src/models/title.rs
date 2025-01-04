@@ -52,3 +52,105 @@ impl std::fmt::Display for Title {
         write!(f, "{}", self.native())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_romaji_with_romaji() {
+        let title = Title {
+            romaji: Some("Romaji Title".to_string()),
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+
+        assert_eq!(title.romaji(), "Romaji Title");
+    }
+
+    #[test]
+    fn test_romaji_without_romaji() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+
+        assert_eq!(title.romaji(), "Native Title");
+    }
+
+    #[test]
+    fn test_english_with_english() {
+        let title = Title {
+            romaji: None,
+            english: Some("English Title".to_string()),
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+
+        assert_eq!(title.english(), "English Title");
+    }
+
+    #[test]
+    fn test_english_without_english() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+
+        assert_eq!(title.english(), "Native Title");
+    }
+
+    #[test]
+    fn test_native() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+
+        assert_eq!(title.native(), "Native Title");
+    }
+
+    #[test]
+    fn test_user_preferred_with_user_preferred() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: Some("User Preferred Title".to_string()),
+        };
+
+        assert_eq!(title.user_preferred(), "User Preferred Title");
+    }
+
+    #[test]
+    fn test_user_preferred_without_user_preferred() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+
+        assert_eq!(title.user_preferred(), "Native Title");
+    }
+
+    #[test]
+    fn test_from_title_to_string() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: "Native Title".to_string(),
+            user_preferred: None,
+        };
+        let title_string: String = title.into();
+
+        assert_eq!(title_string, "Native Title");
+    }
+}

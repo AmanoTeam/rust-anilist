@@ -602,3 +602,45 @@ enum Action {
     /// Search for media.
     Search,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_with_timeout() {
+        let client = Client::with_timeout(30);
+
+        assert_eq!(client.timeout, 30);
+        assert!(client.api_token.is_none());
+    }
+
+    #[test]
+    fn test_with_token() {
+        let client = Client::with_token("test_token");
+
+        assert_eq!(client.timeout, 20);
+        assert_eq!(client.api_token, Some("test_token".to_string()));
+    }
+
+    #[test]
+    fn test_timeout() {
+        let client = Client::with_timeout(30).timeout(60);
+
+        assert_eq!(client.timeout, 60);
+    }
+
+    #[test]
+    fn test_token() {
+        let client = Client::with_timeout(30).token("new_token");
+
+        assert_eq!(client.api_token, Some("new_token".to_string()));
+    }
+
+    #[test]
+    fn test_get_query() {
+        let query = Client::get_query(MediaType::Anime, Action::Get).unwrap();
+
+        assert!(query.contains("query"));
+    }
+}

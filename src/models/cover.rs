@@ -45,3 +45,56 @@ impl Cover {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_largest_with_extra_large() {
+        let cover = Cover {
+            extra_large: Some("https://example.com/extra_large.jpg".to_string()),
+            large: Some("https://example.com/large.jpg".to_string()),
+            medium: Some("https://example.com/medium.jpg".to_string()),
+            color: None,
+        };
+
+        assert_eq!(cover.largest(), Some("https://example.com/extra_large.jpg"));
+    }
+
+    #[test]
+    fn test_largest_with_large() {
+        let cover = Cover {
+            extra_large: None,
+            large: Some("https://example.com/large.jpg".to_string()),
+            medium: Some("https://example.com/medium.jpg".to_string()),
+            color: None,
+        };
+
+        assert_eq!(cover.largest(), Some("https://example.com/large.jpg"));
+    }
+
+    #[test]
+    fn test_largest_with_medium() {
+        let cover = Cover {
+            extra_large: None,
+            large: None,
+            medium: Some("https://example.com/medium.jpg".to_string()),
+            color: None,
+        };
+
+        assert_eq!(cover.largest(), Some("https://example.com/medium.jpg"));
+    }
+
+    #[test]
+    fn test_largest_with_none() {
+        let cover = Cover {
+            extra_large: None,
+            large: None,
+            medium: None,
+            color: None,
+        };
+
+        assert_eq!(cover.largest(), None);
+    }
+}

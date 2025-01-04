@@ -92,3 +92,60 @@ impl std::fmt::Display for Source {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_from_str() {
+        assert_eq!(Source::from("original"), Source::Original);
+        assert_eq!(Source::from("MANGA"), Source::Manga);
+        assert_eq!(Source::from("light_novel"), Source::LightNovel);
+        assert_eq!(Source::from("VISUAL_NOVEL"), Source::VisualNovel);
+        assert_eq!(Source::from("video_game"), Source::VideoGame);
+        assert_eq!(Source::from("other"), Source::Other);
+        assert_eq!(Source::from("NOVEL"), Source::Novel);
+        assert_eq!(Source::from("doujinshi"), Source::Doujinshi);
+        assert_eq!(Source::from("ANIME"), Source::Anime);
+        assert_eq!(Source::from("web_novel"), Source::WebNovel);
+        assert_eq!(Source::from("LIVE_ACTION"), Source::LiveAction);
+        assert_eq!(Source::from("game"), Source::Game);
+        assert_eq!(Source::from("COMIC"), Source::Comic);
+        assert_eq!(
+            Source::from("multimedia_project"),
+            Source::MultimediaProject
+        );
+        assert_eq!(Source::from("picture_book"), Source::PictureBook);
+        assert_eq!(Source::from("unknown"), Source::Other); // Default case
+    }
+
+    #[test]
+    fn test_from_string() {
+        assert_eq!(Source::from("original".to_string()), Source::Original);
+        assert_eq!(Source::from("MANGA".to_string()), Source::Manga);
+        assert_eq!(Source::from("light_novel".to_string()), Source::LightNovel);
+        assert_eq!(
+            Source::from("VISUAL_NOVEL".to_string()),
+            Source::VisualNovel
+        );
+        assert_eq!(Source::from("video_game".to_string()), Source::VideoGame);
+        assert_eq!(Source::from("other".to_string()), Source::Other);
+        assert_eq!(Source::from("NOVEL".to_string()), Source::Novel);
+        assert_eq!(Source::from("doujinshi".to_string()), Source::Doujinshi);
+        assert_eq!(Source::from("ANIME".to_string()), Source::Anime);
+        assert_eq!(Source::from("web_novel".to_string()), Source::WebNovel);
+        assert_eq!(Source::from("LIVE_ACTION".to_string()), Source::LiveAction);
+        assert_eq!(Source::from("game".to_string()), Source::Game);
+        assert_eq!(Source::from("COMIC".to_string()), Source::Comic);
+        assert_eq!(
+            Source::from("multimedia_project".to_string()),
+            Source::MultimediaProject
+        );
+        assert_eq!(
+            Source::from("picture_book".to_string()),
+            Source::PictureBook
+        );
+        assert_eq!(Source::from("unknown".to_string()), Source::Other); // Default case
+    }
+}

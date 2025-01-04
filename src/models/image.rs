@@ -25,3 +25,38 @@ impl Image {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_largest_with_large() {
+        let image = Image {
+            large: "https://example.com/large.jpg".to_string(),
+            medium: "https://example.com/medium.jpg".to_string(),
+        };
+
+        assert_eq!(image.largest(), "https://example.com/large.jpg");
+    }
+
+    #[test]
+    fn test_largest_with_empty_large() {
+        let image = Image {
+            large: "".to_string(),
+            medium: "https://example.com/medium.jpg".to_string(),
+        };
+
+        assert_eq!(image.largest(), "https://example.com/medium.jpg");
+    }
+
+    #[test]
+    fn test_largest_with_empty_large_and_medium() {
+        let image = Image {
+            large: "".to_string(),
+            medium: "".to_string(),
+        };
+
+        assert_eq!(image.largest(), "");
+    }
+}

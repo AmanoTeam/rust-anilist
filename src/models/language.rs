@@ -241,3 +241,160 @@ impl std::fmt::Display for Language {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_code() {
+        assert_eq!(Language::Japanese.code(), "ja");
+        assert_eq!(Language::English.code(), "en");
+        assert_eq!(Language::Korean.code(), "ko");
+        assert_eq!(Language::Italian.code(), "it");
+        assert_eq!(Language::Spanish.code(), "es");
+        assert_eq!(Language::Portuguese.code(), "pt");
+        assert_eq!(Language::French.code(), "fr");
+        assert_eq!(Language::German.code(), "de");
+        assert_eq!(Language::Hebrew.code(), "he");
+        assert_eq!(Language::Hungarian.code(), "hu");
+        assert_eq!(Language::Chinese.code(), "zh");
+        assert_eq!(Language::Arabic.code(), "ar");
+        assert_eq!(Language::Filipino.code(), "fil");
+        assert_eq!(Language::Catalan.code(), "ca");
+        assert_eq!(Language::Finnish.code(), "fi");
+        assert_eq!(Language::Turkish.code(), "tr");
+        assert_eq!(Language::Dutch.code(), "nl");
+        assert_eq!(Language::Swedish.code(), "sv");
+        assert_eq!(Language::Thai.code(), "th");
+        assert_eq!(Language::Tagalog.code(), "tl");
+        assert_eq!(Language::Malaysian.code(), "ms");
+        assert_eq!(Language::Indonesian.code(), "id");
+        assert_eq!(Language::Vietnamese.code(), "vi");
+        assert_eq!(Language::Nepali.code(), "ne");
+        assert_eq!(Language::Hindi.code(), "hi");
+        assert_eq!(Language::Urdu.code(), "ur");
+    }
+
+    #[test]
+    fn test_iso() {
+        assert_eq!(Language::Japanese.iso(), "ja");
+        assert_eq!(Language::English.iso(), "en");
+        assert_eq!(Language::Korean.iso(), "ko");
+        assert_eq!(Language::Italian.iso(), "it");
+        assert_eq!(Language::Spanish.iso(), "es");
+        assert_eq!(Language::Portuguese.iso(), "pt");
+        assert_eq!(Language::French.iso(), "fr");
+        assert_eq!(Language::German.iso(), "de");
+        assert_eq!(Language::Hebrew.iso(), "he");
+        assert_eq!(Language::Hungarian.iso(), "hu");
+        assert_eq!(Language::Chinese.iso(), "zh");
+        assert_eq!(Language::Arabic.iso(), "ar");
+        assert_eq!(Language::Filipino.iso(), "fil");
+        assert_eq!(Language::Catalan.iso(), "ca");
+        assert_eq!(Language::Finnish.iso(), "fi");
+        assert_eq!(Language::Turkish.iso(), "tr");
+        assert_eq!(Language::Dutch.iso(), "nl");
+        assert_eq!(Language::Swedish.iso(), "sv");
+        assert_eq!(Language::Thai.iso(), "th");
+        assert_eq!(Language::Tagalog.iso(), "tl");
+        assert_eq!(Language::Malaysian.iso(), "ms");
+        assert_eq!(Language::Indonesian.iso(), "id");
+        assert_eq!(Language::Vietnamese.iso(), "vi");
+        assert_eq!(Language::Nepali.iso(), "ne");
+        assert_eq!(Language::Hindi.iso(), "hi");
+        assert_eq!(Language::Urdu.iso(), "ur");
+    }
+
+    #[test]
+    fn test_native() {
+        assert_eq!(Language::Japanese.native(), "日本語");
+        assert_eq!(Language::English.native(), "English");
+        assert_eq!(Language::Korean.native(), "한국어");
+        assert_eq!(Language::Italian.native(), "Italiano");
+        assert_eq!(Language::Spanish.native(), "Español");
+        assert_eq!(Language::Portuguese.native(), "Português");
+        assert_eq!(Language::French.native(), "Français");
+        assert_eq!(Language::German.native(), "Deutsch");
+        assert_eq!(Language::Hebrew.native(), "עברית");
+        assert_eq!(Language::Hungarian.native(), "Magyar");
+        assert_eq!(Language::Chinese.native(), "中文");
+        assert_eq!(Language::Arabic.native(), "العربية");
+        assert_eq!(Language::Filipino.native(), "Filipino");
+        assert_eq!(Language::Catalan.native(), "Català");
+        assert_eq!(Language::Finnish.native(), "Suomi");
+        assert_eq!(Language::Turkish.native(), "Türkçe");
+        assert_eq!(Language::Dutch.native(), "Nederlands");
+        assert_eq!(Language::Swedish.native(), "Svenska");
+        assert_eq!(Language::Thai.native(), "ไทย");
+        assert_eq!(Language::Tagalog.native(), "Tagalog");
+        assert_eq!(Language::Malaysian.native(), "Bahasa Melayu");
+        assert_eq!(Language::Indonesian.native(), "Bahasa Indonesia");
+        assert_eq!(Language::Vietnamese.native(), "Tiếng Việt");
+        assert_eq!(Language::Nepali.native(), "नेपाली");
+        assert_eq!(Language::Hindi.native(), "हिंदी");
+        assert_eq!(Language::Urdu.native(), "اردو");
+    }
+
+    #[test]
+    fn test_from_str() {
+        assert_eq!(Language::from("ja"), Language::Japanese);
+        assert_eq!(Language::from("EN"), Language::English);
+        assert_eq!(Language::from("ko"), Language::Korean);
+        assert_eq!(Language::from("it"), Language::Italian);
+        assert_eq!(Language::from("es"), Language::Spanish);
+        assert_eq!(Language::from("pt"), Language::Portuguese);
+        assert_eq!(Language::from("fr"), Language::French);
+        assert_eq!(Language::from("de"), Language::German);
+        assert_eq!(Language::from("he"), Language::Hebrew);
+        assert_eq!(Language::from("hu"), Language::Hungarian);
+        assert_eq!(Language::from("zh"), Language::Chinese);
+        assert_eq!(Language::from("ar"), Language::Arabic);
+        assert_eq!(Language::from("fil"), Language::Filipino);
+        assert_eq!(Language::from("ca"), Language::Catalan);
+        assert_eq!(Language::from("fi"), Language::Finnish);
+        assert_eq!(Language::from("tr"), Language::Turkish);
+        assert_eq!(Language::from("nl"), Language::Dutch);
+        assert_eq!(Language::from("sv"), Language::Swedish);
+        assert_eq!(Language::from("th"), Language::Thai);
+        assert_eq!(Language::from("tl"), Language::Tagalog);
+        assert_eq!(Language::from("ms"), Language::Malaysian);
+        assert_eq!(Language::from("id"), Language::Indonesian);
+        assert_eq!(Language::from("vi"), Language::Vietnamese);
+        assert_eq!(Language::from("ne"), Language::Nepali);
+        assert_eq!(Language::from("hi"), Language::Hindi);
+        assert_eq!(Language::from("ur"), Language::Urdu);
+        assert_eq!(Language::from("unknown"), Language::Japanese); // Default case
+    }
+
+    #[test]
+    fn test_from_string() {
+        assert_eq!(Language::from("ja".to_string()), Language::Japanese);
+        assert_eq!(Language::from("EN".to_string()), Language::English);
+        assert_eq!(Language::from("ko".to_string()), Language::Korean);
+        assert_eq!(Language::from("it".to_string()), Language::Italian);
+        assert_eq!(Language::from("es".to_string()), Language::Spanish);
+        assert_eq!(Language::from("pt".to_string()), Language::Portuguese);
+        assert_eq!(Language::from("fr".to_string()), Language::French);
+        assert_eq!(Language::from("de".to_string()), Language::German);
+        assert_eq!(Language::from("he".to_string()), Language::Hebrew);
+        assert_eq!(Language::from("hu".to_string()), Language::Hungarian);
+        assert_eq!(Language::from("zh".to_string()), Language::Chinese);
+        assert_eq!(Language::from("ar".to_string()), Language::Arabic);
+        assert_eq!(Language::from("fil".to_string()), Language::Filipino);
+        assert_eq!(Language::from("ca".to_string()), Language::Catalan);
+        assert_eq!(Language::from("fi".to_string()), Language::Finnish);
+        assert_eq!(Language::from("tr".to_string()), Language::Turkish);
+        assert_eq!(Language::from("nl".to_string()), Language::Dutch);
+        assert_eq!(Language::from("sv".to_string()), Language::Swedish);
+        assert_eq!(Language::from("th".to_string()), Language::Thai);
+        assert_eq!(Language::from("tl".to_string()), Language::Tagalog);
+        assert_eq!(Language::from("ms".to_string()), Language::Malaysian);
+        assert_eq!(Language::from("id".to_string()), Language::Indonesian);
+        assert_eq!(Language::from("vi".to_string()), Language::Vietnamese);
+        assert_eq!(Language::from("ne".to_string()), Language::Nepali);
+        assert_eq!(Language::from("hi".to_string()), Language::Hindi);
+        assert_eq!(Language::from("ur".to_string()), Language::Urdu);
+        assert_eq!(Language::from("unknown".to_string()), Language::Japanese); // Default case
+    }
+}

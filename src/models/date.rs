@@ -3,7 +3,7 @@
 
 //! This module contains the `Date` struct.
 
-use chrono::{Datelike, NaiveDate};
+use chrono::{Datelike, Local, NaiveDate};
 use serde::{Deserialize, Serialize};
 
 /// Represents a date.
@@ -22,6 +22,17 @@ impl Date {
     /// Creates a new date.
     pub fn new(year: Option<i32>, month: Option<u32>, day: Option<u32>) -> Self {
         Self { year, month, day }
+    }
+
+    /// Creates a new date from the current date.
+    pub fn now() -> Self {
+        let now = Local::now().naive_local().date();
+
+        Self {
+            year: Some(now.year()),
+            month: Some(now.month()),
+            day: Some(now.day()),
+        }
     }
 
     /// Returns the year of the date.
@@ -139,5 +150,86 @@ impl From<Date> for NaiveDate {
 impl std::fmt::Display for Date {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.as_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::Local;
+
+    #[test]
+    fn test_new() {
+        let date = Date::new(Some(2023), Some(10), Some(5));
+
+        assert_eq!(date.year(), Some(2023));
+        assert_eq!(date.month(), Some(10));
+        assert_eq!(date.day(), Some(5));
+    }
+
+    #[test]
+    fn test_now() {
+        let date = Date::now();
+        let now = Local::now().naive_local().date();
+
+        assert_eq!(date.year(), Some(now.year()));
+        assert_eq!(date.month(), Some(now.month()));
+        assert_eq!(date.day(), Some(now.day()));
+    }
+
+    #[test]
+    fn test_year() {
+        let date = Date::new(Some(2023), None, None);
+
+        assert_eq!(date.year(), Some(2023));
+    }
+
+    #[test]
+    fn test_month() {
+        let date = Date::new(None, Some(10), None);
+
+        assert_eq!(date.month(), Some(10));
+    }
+
+    #[test]
+    fn test_day() {
+        let date = Date::new(None, None, Some(5));
+
+        assert_eq!(date.day(), Some(5));
+    }
+
+    #[test]
+    fn test_format() {
+        let date = Date::new(Some(2023), Some(10), Some(5));
+        let formatted = date.format("{yyyy}-{mm}-{dd}");
+
+        assert_eq!(formatted, "2023-10-05");
+    }
+
+    #[test]
+    fn test_as_date() {
+        let date = Date::new(Some(2023), Some(10), Some(5));
+        let naive_date = date.as_date();
+
+        assert_eq!(naive_date.year(), 2023);
+        assert_eq!(naive_date.month(), 10);
+        assert_eq!(naive_date.day(), 5);
+    }
+
+    #[test]
+    fn test_as_string() {
+        let date = Date::new(Some(2023), Some(10), Some(5));
+        let date_string = date.as_string();
+
+        assert_eq!(date_string, "2023-10-05");
+    }
+
+    #[test]
+    fn test_is_valid() {
+        let valid_date = Date::new(Some(2023), Some(10), Some(5));
+        let invalid_date = Date::new(Some(2023), None, Some(5));
+
+        assert!(valid_date.is_valid());
+        assert!(!invalid_date.is_valid());
     }
 }
