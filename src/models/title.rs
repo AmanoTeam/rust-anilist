@@ -10,13 +10,13 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all(deserialize = "lowercase"))]
 pub struct Title {
     /// The title in Romaji (Latin script).
-    pub romaji: Option<String>,
+    romaji: Option<String>,
     /// The title in English.
-    pub english: Option<String>,
+    english: Option<String>,
     /// The title in the native language.
-    pub native: String,
+    native: String,
     /// The title preferred by the user.
-    pub user_preferred: Option<String>,
+    user_preferred: Option<String>,
 }
 
 impl Title {
