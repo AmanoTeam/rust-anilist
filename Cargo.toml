@@ -1,6 +1,6 @@
 [package]
 name = "rust-anilist"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["Andriel Ferreira <andrielfr@proton.me>"]
 license = "MIT"
 description = """
