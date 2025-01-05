@@ -158,6 +158,66 @@ mod tests {
     }
 
     #[test]
+    fn test_is_empty_all_none_and_empty() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: String::new(),
+            user_preferred: None,
+        };
+
+        assert!(title.is_empty());
+    }
+
+    #[test]
+    fn test_is_empty_romaji_some() {
+        let title = Title {
+            romaji: Some(String::from("Romaji")),
+            english: None,
+            native: String::new(),
+            user_preferred: None,
+        };
+
+        assert!(!title.is_empty());
+    }
+
+    #[test]
+    fn test_is_empty_english_some() {
+        let title = Title {
+            romaji: None,
+            english: Some(String::from("English")),
+            native: String::new(),
+            user_preferred: None,
+        };
+
+        assert!(!title.is_empty());
+    }
+
+    #[test]
+    fn test_is_empty_native_not_empty() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: String::from("Native"),
+            user_preferred: None,
+        };
+
+        assert!(!title.is_empty());
+    }
+
+    #[test]
+    fn test_is_empty_user_preferred_some() {
+        let title = Title {
+            romaji: None,
+            english: None,
+            native: String::new(),
+            user_preferred: Some(String::from("User Preferred")),
+        };
+
+        assert!(!title.is_empty());
+    }
+
+    #[test]
     fn test_from_title_to_string() {
         let title = Title {
             romaji: None,
