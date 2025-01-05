@@ -81,13 +81,13 @@ pub struct Anime {
     /// The season of the anime.
     pub season: Option<Season>,
     /// The year of the season of the anime.
-    pub season_year: Option<i64>,
+    pub season_year: Option<u32>,
     /// The integer representation of the season of the anime.
-    pub season_int: Option<i64>,
+    pub season_int: Option<u64>,
     /// The number of episodes of the anime.
-    pub episodes: Option<i64>,
+    pub episodes: Option<u16>,
     /// The duration of the episodes of the anime.
-    pub duration: Option<i64>,
+    pub duration: Option<u8>,
     /// The country of origin of the anime.
     pub country_of_origin: Option<String>,
     /// Whether the anime is licensed or not.
@@ -97,7 +97,7 @@ pub struct Anime {
     /// The hashtag of the anime.
     pub hashtag: Option<String>,
     /// The updated date of the anime.
-    pub updated_at: Option<i64>,
+    pub updated_at: Option<u64>,
     /// The cover image of the anime.
     #[serde(rename = "coverImage")]
     pub cover: Cover,
@@ -109,17 +109,17 @@ pub struct Anime {
     /// The synonyms of the anime.
     pub synonyms: Option<Vec<String>>,
     /// The average score of the anime.
-    pub average_score: Option<i64>,
+    pub average_score: Option<u8>,
     /// The mean score of the anime.
-    pub mean_score: Option<i64>,
+    pub mean_score: Option<u8>,
     /// The popularity of the anime.
-    pub popularity: Option<i64>,
+    pub popularity: Option<u32>,
     /// Whether the anime is locked or not.
     pub is_locked: Option<bool>,
     /// The trending of the anime.
-    pub trending: Option<i64>,
+    pub trending: Option<u32>,
     /// The number of favourites of the anime.
-    pub favourites: Option<i64>,
+    pub favourites: Option<u32>,
     /// The tags of the anime.
     pub tags: Option<Vec<Tag>>,
     /// The relations of the anime.
@@ -203,13 +203,13 @@ impl Anime {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct AiringSchedule {
     /// The ID of the airing schedule.
-    pub id: i64,
+    pub id: u32,
     /// The airing date.
     #[serde(rename = "airingAt")]
-    pub at: i64,
+    pub at: u64,
     /// Time until the airing.
     #[serde(rename = "timeUntilAiring")]
-    pub time_until: i64,
+    pub time_until: u64,
     /// The airing episode.
-    pub episode: i64,
+    pub episode: u32,
 }

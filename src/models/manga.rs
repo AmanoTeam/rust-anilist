@@ -75,9 +75,9 @@ pub struct Manga {
     /// The end date of the manga.
     pub end_date: Option<Date>,
     /// The number of chapters of the manga.
-    pub chapters: Option<i64>,
+    pub chapters: Option<u16>,
     /// The number of volumes of the manga.
-    pub volumes: Option<i64>,
+    pub volumes: Option<u16>,
     /// The country of origin of the manga.
     pub country_of_origin: Option<String>,
     /// Whether the manga is licensed or not.
@@ -87,7 +87,7 @@ pub struct Manga {
     /// The hashtag of the manga.
     pub hashtag: Option<String>,
     /// The updated date of the manga.
-    pub updated_at: Option<i64>,
+    pub updated_at: Option<u64>,
     /// The cover image of the manga.
     #[serde(rename = "coverImage")]
     pub cover: Cover,
@@ -99,17 +99,17 @@ pub struct Manga {
     /// The synonyms of the manga.
     pub synonyms: Option<Vec<String>>,
     /// The average score of the manga.
-    pub average_score: Option<i64>,
+    pub average_score: Option<u8>,
     /// The mean score of the manga.
-    pub mean_score: Option<i64>,
+    pub mean_score: Option<u8>,
     /// The popularity of the manga.
-    pub popularity: Option<i64>,
+    pub popularity: Option<u32>,
     /// Whether the manga is locked or not.
     pub is_locked: Option<bool>,
     /// The trending of the manga.
-    pub trending: Option<i64>,
+    pub trending: Option<u32>,
     /// The number of favourites of the manga.
-    pub favourites: Option<i64>,
+    pub favourites: Option<u32>,
     /// The tags of the manga.
     pub tags: Option<Vec<Tag>>,
     /// The relations of the manga.

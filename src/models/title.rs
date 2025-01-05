@@ -39,6 +39,22 @@ impl Title {
     pub fn user_preferred(&self) -> &str {
         self.user_preferred.as_deref().unwrap_or(&self.native)
     }
+
+    /// Checks if the title is empty.
+    ///
+    /// A title is considered empty if all of its fields are either `None` or empty.
+    ///
+    /// # Returns
+    ///
+    /// * `true` if the `romaji`, `english`, and `user_preferred` fields are `None`
+    ///   and the `native` field is an empty string.
+    /// * `false` otherwise.
+    pub fn is_empty(&self) -> bool {
+        self.romaji.is_none()
+            && self.english.is_none()
+            && self.native.is_empty()
+            && self.user_preferred.is_none()
+    }
 }
 
 impl From<Title> for String {

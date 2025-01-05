@@ -61,7 +61,7 @@ pub struct Relation {
 /// * `Source` - The media is the source material for another work.
 /// * `Compilation` - The media is a compilation of another work.
 /// * `Contains` - The media contains another work.
-#[derive(Debug, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "UPPERCASE"))]
 pub enum RelationType {
     /// The media is an adaptation of another work.
@@ -83,6 +83,7 @@ pub enum RelationType {
     /// The media is a spin-off of another work.
     SpinOff,
     /// The media has some other type of relation to another work.
+    #[default]
     Other,
     /// The media is the source material for another work.
     Source,
@@ -90,4 +91,27 @@ pub enum RelationType {
     Compilation,
     /// The media contains another work.
     Contains,
+}
+
+impl RelationType {
+    /// Returns a summary of the relation type.
+    pub fn summary(&self) -> &str {
+        match self {
+            RelationType::Adaptation => "An adaption of this media into a different format",
+            RelationType::Prequel => "Released before the relation",
+            RelationType::Sequel => "Released after the relation",
+            RelationType::Parent => "The media a side story is from",
+            RelationType::SideStory => "A side story of the parent media",
+            RelationType::Character => "Shares at least 1 character",
+            RelationType::Summary => "A shortened and summarized version",
+            RelationType::Alternative => "An alternative version of the same media",
+            RelationType::SpinOff => {
+                "An alternative version of the media with a different primary focus"
+            }
+            RelationType::Other => "Other",
+            RelationType::Source => "The source material the media was adapted from",
+            RelationType::Compilation => "A compilation of the media",
+            RelationType::Contains => "A media that contains the relation",
+        }
+    }
 }

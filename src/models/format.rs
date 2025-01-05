@@ -65,6 +65,22 @@ impl Format {
             Format::OneShot => "One-Shot",
         }
     }
+
+    /// Returns a summary of the format.
+    pub fn summary(&self) -> &str {
+        match self {
+            Format::Tv => "Anime broadcast on television",
+            Format::TvShort => "Anime which are under 15 minutes in length and broadcast on television",
+            Format::Movie => "Anime movies with a theatrical release",
+            Format::Special => "Special episodes that have been included in DVD/Blu-ray releases, picture dramas, pilots, etc",
+            Format::Ova => "(Original Video Animation) Anime that have been released directly on DVD/Blu-ray without originally going through a theatrical release or television broadcast",
+            Format::Ona => "(Original Net Animation) Anime that have been originally released online or are only available through streaming services.",
+            Format::Music => "Short anime released as a music video",
+            Format::Manga => "Professionally published manga with more than one chapter",
+            Format::Novel => "Written books released as a series of light novels",
+            Format::OneShot => "Manga with just one chapter",
+        }
+    }
 }
 
 impl From<&str> for Format {

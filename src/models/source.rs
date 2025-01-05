@@ -10,7 +10,6 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub enum Source {
     /// The original source.
-    #[default]
     Original,
     /// Manga source.
     Manga,
@@ -21,6 +20,7 @@ pub enum Source {
     /// Video game source.
     VideoGame,
     /// Other source.
+    #[default]
     Other,
     /// Novel source.
     Novel,
@@ -40,6 +40,37 @@ pub enum Source {
     MultimediaProject,
     /// Picture book source.
     PictureBook,
+}
+
+impl Source {
+    /// Returns a summary of the source.
+    pub fn summary(&self) -> &str {
+        match self {
+            Source::Original => "An original production not based of another work",
+            Source::Manga => "Asian comic book",
+            Source::LightNovel => {
+                "A written work published in volumes primarily targeting young adults and teens"
+            }
+            Source::VisualNovel => {
+                "A video game genre that originated in Japan, featuring mostly static graphics"
+            }
+            Source::VideoGame => {
+                "An electronic game that involves interaction with a user interface"
+            }
+            Source::Other => "A source that does not fit any other category",
+            Source::Novel => "A written work not published in volumes",
+            Source::Doujinshi => "Self-published works",
+            Source::Anime => "Japanese animated productions",
+            Source::WebNovel => "A novel published online",
+            Source::LiveAction => {
+                "A work that involves live action rather than animation such as movies or TV shows"
+            }
+            Source::Game => "A competitive activity or sport excluding video games",
+            Source::Comic => "A publication that consists of comic art in the form of sequential panels excluding manga",
+            Source::MultimediaProject => "A work that is a collection of multiple media",
+            Source::PictureBook => "A book with pictures and little text",
+        }
+    }
 }
 
 impl From<&str> for Source {

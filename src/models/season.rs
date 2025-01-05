@@ -49,6 +49,16 @@ impl Season {
             Season::Fall => "Fall",
         }
     }
+
+    /// Returns a summary of the season.
+    pub fn summary(&self) -> &str {
+        match self {
+            Season::Winter => "Winter is the coldest season of the year in polar and temperate zones; it does not occur in most of the tropical zone.",
+            Season::Spring => "Spring is one of the four temperate seasons, following winter and preceding summer.",
+            Season::Summer => "Summer is the hottest of the four temperate seasons, falling after spring and before autumn.",
+            Season::Fall => "Autumn, also known as fall in North American English, is one of the four temperate seasons."
+        }
+    }
 }
 
 impl From<&str> for Season {

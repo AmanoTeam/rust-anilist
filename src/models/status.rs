@@ -34,6 +34,27 @@ pub enum Status {
     Repeating,
 }
 
+impl Status {
+    /// Returns a summary of the status.
+    pub fn summary(&self) -> &str {
+        match self {
+            Status::Finished => "Has completed and is no longer being updated.",
+            Status::Releasing => "Currently releasing.",
+            Status::NotYetReleased => "To be released in the future.",
+            Status::Cancelled => "Ended before the work could be completed.",
+            Status::Hiatus => "Currently paused with the intention of resuming in the future.",
+            Status::Current => "Currently being updated.",
+            Status::Planning => "Planned for future release.",
+            Status::Completed => "Has completed and is no longer being updated.",
+            Status::Dropped => {
+                "No longer being updated due to a lack of interest or other reasons."
+            }
+            Status::Paused => "Currently paused.",
+            Status::Repeating => "Repeating the same content.",
+        }
+    }
+}
+
 impl std::fmt::Display for Status {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
