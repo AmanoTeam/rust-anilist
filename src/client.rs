@@ -8,7 +8,7 @@ use std::time::Duration;
 
 use crate::{
     models::{Anime, Character, Image, Manga, MediaType, Person, Title, User},
-    Result,
+    Error, Result,
 };
 
 /// Represents a client for interacting with an API.
@@ -109,7 +109,7 @@ impl Client {
                 serde_json::json!({ "id": id }),
             )
             .await
-            .unwrap();
+            .map_err(|e| Error::ApiError(e.to_string()))?;
 
         match serde_json::from_str::<Anime>(&data["data"]["Media"].to_string()) {
             Ok(mut anime) => {
@@ -150,7 +150,7 @@ impl Client {
                 serde_json::json!({ "id": id }),
             )
             .await
-            .unwrap();
+            .map_err(|e| Error::ApiError(e.to_string()))?;
 
         match serde_json::from_str::<Manga>(&data["data"]["Media"].to_string()) {
             Ok(mut manga) => {
@@ -190,7 +190,7 @@ impl Client {
                 serde_json::json!({ "id": id }),
             )
             .await
-            .unwrap();
+            .map_err(|e| Error::ApiError(e.to_string()))?;
 
         match serde_json::from_str::<Character>(&data["data"]["Character"].to_string()) {
             Ok(mut character) => {
@@ -253,7 +253,7 @@ impl Client {
                 serde_json::json!({ "id": id }),
             )
             .await
-            .unwrap();
+            .map_err(|e| Error::ApiError(e.to_string()))?;
 
         match serde_json::from_str::<User>(&data["data"]["User"].to_string()) {
             Ok(user) => Ok(user),
@@ -290,7 +290,7 @@ impl Client {
                 serde_json::json!({ "name": name }),
             )
             .await
-            .unwrap();
+            .map_err(|e| Error::ApiError(e.to_string()))?;
 
         match serde_json::from_str::<User>(&data["data"]["User"].to_string()) {
             Ok(mut user) => {
@@ -330,7 +330,7 @@ impl Client {
                 serde_json::json!({ "id": id }),
             )
             .await
-            .unwrap();
+            .map_err(|e| Error::ApiError(e.to_string()))?;
 
         match serde_json::from_str::<Person>(&data["data"]["Staff"].to_string()) {
             Ok(mut person) => {
@@ -372,6 +372,7 @@ impl Client {
                 serde_json::json!({ "search": title, "page": page, "per_page": limit, }),
             )
             .await
+            .map_err(|e| Error::ApiError(e.to_string()))
             .unwrap();
 
         if let Some(medias) = result["data"]["Page"]["media"].as_array() {
@@ -423,6 +424,7 @@ impl Client {
                 serde_json::json!({ "search": title, "page": page, "per_page": limit, }),
             )
             .await
+            .map_err(|e| Error::ApiError(e.to_string()))
             .unwrap();
 
         if let Some(medias) = result["data"]["Page"]["media"].as_array() {
@@ -474,6 +476,7 @@ impl Client {
                 serde_json::json!({ "search": name, "page": page, "per_page": limit, }),
             )
             .await
+            .map_err(|e| Error::ApiError(e.to_string()))
             .unwrap();
 
         if let Some(users) = result["data"]["Page"]["users"].as_array() {
