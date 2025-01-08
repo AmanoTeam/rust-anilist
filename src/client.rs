@@ -7,7 +7,9 @@ use serde::Deserialize;
 use std::time::Duration;
 
 use crate::{
-    models::{Anime, Character, Image, Manga, MediaType, Person, Title, User},
+    models::{
+        Anime, Character, Cover, Format, Image, Manga, MediaType, Person, Status, Title, User,
+    },
     Error, Result,
 };
 
@@ -381,7 +383,13 @@ impl Client {
             for media in medias.iter() {
                 animes.push(Anime {
                     id: media["id"].as_i64().unwrap(),
+                    id_mal: media["idMal"].as_i64(),
                     title: Title::deserialize(&media["title"]).unwrap(),
+                    format: Format::deserialize(&media["format"]).unwrap(),
+                    status: Status::deserialize(&media["status"]).unwrap(),
+                    description: media["description"].as_str().unwrap().to_string(),
+                    cover: Cover::deserialize(&media["coverImage"]).unwrap(),
+                    banner: media["bannerImage"].as_str().map(String::from),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
 
                     client: self.clone(),
@@ -433,7 +441,13 @@ impl Client {
             for media in medias.iter() {
                 mangas.push(Manga {
                     id: media["id"].as_i64().unwrap(),
+                    id_mal: media["idMal"].as_i64(),
                     title: Title::deserialize(&media["title"]).unwrap(),
+                    format: Format::deserialize(&media["format"]).unwrap(),
+                    status: Status::deserialize(&media["status"]).unwrap(),
+                    description: media["description"].as_str().unwrap().to_string(),
+                    cover: Cover::deserialize(&media["coverImage"]).unwrap(),
+                    banner: media["bannerImage"].as_str().map(String::from),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
 
                     client: self.clone(),

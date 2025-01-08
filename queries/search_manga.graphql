@@ -10,11 +10,22 @@ query($search: String, $page: Int = 1, $per_page: Int = 10) {
         }
         media(search: $search, type: MANGA, sort: POPULARITY_DESC) {
             id
+            idMal
             title {
                 romaji
                 english
                 native
             }
+            format
+            status(version: 2)
+            description(asHtml: true)
+            coverImage {
+              extraLarge
+              large
+              medium
+              color
+            }
+            bannerImage
             siteUrl
         }
     }
