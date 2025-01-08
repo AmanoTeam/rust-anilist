@@ -500,7 +500,9 @@ impl Client {
                 vec.push(User {
                     id: user["id"].as_i64().unwrap() as i32,
                     name: user["name"].as_str().unwrap().to_string(),
+                    about: user["about"].as_str().map(String::from),
                     avatar: Image::deserialize(&user["avatar"]).ok(),
+                    banner: user["bannerImage"].as_str().map(String::from),
 
                     client: self.clone(),
                     ..Default::default()
