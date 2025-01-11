@@ -18,9 +18,9 @@ pub struct Link {
     /// The thumbnail of the link.
     pub thumbnail: Option<String>,
     /// The URL of the link.
-    pub url: Option<String>,
+    pub url: String,
     /// The site of the link.
-    pub site: Option<String>,
+    pub site: String,
     /// The ID of the site of the link.
     pub site_id: Option<i64>,
     /// The type of the link.
