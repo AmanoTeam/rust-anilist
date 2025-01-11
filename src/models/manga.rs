@@ -47,10 +47,6 @@ use crate::{Client, Result};
 /// * `trending` - The trending of the manga.
 /// * `favourites` - The number of favourites of the manga.
 /// * `tags` - The tags of the manga.
-/// * `relations` - The relations of the manga.
-/// * `characters` - The characters of the manga.
-/// * `staff` - The staff of the manga.
-/// * `studios` - The studios of the manga.
 /// * `is_favourite` - Whether the manga is favourite or not.
 /// * `is_favourite_blocked` - Whether the manga is favourite blocked or not.
 /// * `is_adult` - Whether the manga is adult or not.
@@ -116,8 +112,7 @@ pub struct Manga {
     /// The relations of the manga.
     pub(crate) relations: Value,
     /// The characters of the manga.
-    #[serde(skip)]
-    pub characters: Option<Vec<Character>>,
+    pub(crate) characters: Value,
     /// The staff of the manga.
     #[serde(skip)]
     pub staff: Option<Vec<Person>>,
@@ -171,6 +166,20 @@ impl Manga {
         } else {
             panic!("This manga is already full loaded")
         }
+    }
+
+    /// Returns the characters of the manga.
+    pub fn characters(&self) -> Vec<Character> {
+        self.characters
+            .as_object()
+            .unwrap()
+            .get("nodes")
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|c| serde_json::from_value(c.clone()).unwrap())
+            .collect()
     }
 
     /// Returns the relations of the manga.

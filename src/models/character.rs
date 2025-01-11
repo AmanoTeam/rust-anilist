@@ -3,7 +3,10 @@
 
 //! This module contains the `Character` struct and its related types.
 
+use std::fmt::Display;
+
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use super::{Date, Gender, Image, Name, Person};
 use crate::{Client, Result};
@@ -30,6 +33,9 @@ pub struct Character {
     pub age: Option<String>,
     /// The blood type of the character.
     pub blood_type: Option<String>,
+    /// The medias that the character participates.
+    #[serde(rename = "media")]
+    pub(crate) medias: Option<Value>,
     /// Whether the character is a favorite.
     pub is_favourite: Option<bool>,
     /// Whether the character is blocked from being a favorite.
@@ -100,7 +106,7 @@ impl Character {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_medias<T>(&self) -> Result<T> {
+    pub async fn get_medias<T>(&self) -> Result<Vec<T>> {
         unimplemented!()
     }
 }
@@ -115,4 +121,14 @@ pub enum CharacterRole {
     Main,
     /// A supporting character.
     Supporting,
+}
+
+impl Display for CharacterRole {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CharacterRole::Background => write!(f, "Background"),
+            CharacterRole::Main => write!(f, "Main"),
+            CharacterRole::Supporting => write!(f, "Supporting"),
+        }
+    }
 }

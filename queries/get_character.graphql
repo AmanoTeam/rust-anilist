@@ -27,6 +27,19 @@ query ($id: Int) {
    }
    age
    bloodType
+   media {
+     edges {
+       node {
+         title {
+           romaji
+           english
+           native
+         }
+         id
+         type
+       }
+     }
+   }
    isFavourite
    isFavouriteBlocked
    siteUrl

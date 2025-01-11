@@ -109,7 +109,7 @@ impl Person {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_medias<T>(&self) -> Result<T> {
+    pub async fn get_medias<T>(&self) -> Result<Vec<T>> {
         unimplemented!()
     }
 
@@ -137,7 +137,7 @@ impl Person {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_character_medias<T>(&self, _character_id: i64) -> Result<T> {
+    pub async fn get_character_medias<T>(&self, _character_id: i64) -> Result<Vec<T>> {
         unimplemented!()
     }
 }

@@ -49,9 +49,6 @@ use crate::{Client, Result};
 /// * `trending` - The trending of the anime.
 /// * `favourites` - The number of favourites of the anime.
 /// * `tags` - The tags of the anime.
-/// * `characters` - The characters of the anime.
-/// * `staff` - The staff of the anime.
-/// * `studios` - The studios of the anime.
 /// * `is_favourite` - Whether the anime is favourite or not.
 /// * `is_favourite_blocked` - Whether the anime is favourite blocked or not.
 /// * `is_adult` - Whether the anime is adult or not.
@@ -125,8 +122,7 @@ pub struct Anime {
     /// The relations of the anime.
     pub(crate) relations: Value,
     /// The characters of the anime.
-    #[serde(skip)]
-    pub characters: Option<Vec<Character>>,
+    pub(crate) characters: Value,
     /// The staff of the anime.
     #[serde(skip)]
     pub staff: Option<Vec<Person>>,
@@ -184,6 +180,20 @@ impl Anime {
         } else {
             panic!("This anime is already full loaded!")
         }
+    }
+
+    /// Returns the characters of the anime.
+    pub fn characters(&self) -> Vec<Character> {
+        self.characters
+            .as_object()
+            .unwrap()
+            .get("nodes")
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|c| serde_json::from_value(c.clone()).unwrap())
+            .collect()
     }
 
     /// Returns the relations of the anime.

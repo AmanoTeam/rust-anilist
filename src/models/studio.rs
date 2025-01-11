@@ -58,7 +58,7 @@ impl Studio {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn get_medias<T>(&self) -> Result<T> {
+    pub async fn get_medias<T>(&self) -> Result<Vec<T>> {
         unimplemented!()
     }
 }
