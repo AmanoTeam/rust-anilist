@@ -4,6 +4,7 @@
 //! This module contains the `Manga` struct and its related types.
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use super::{
     Character, Cover, Date, Format, Link, Person, Relation, Source, Status, Studio, Tag, Title,
@@ -113,8 +114,7 @@ pub struct Manga {
     /// The tags of the manga.
     pub tags: Option<Vec<Tag>>,
     /// The relations of the manga.
-    #[serde(skip)]
-    pub relations: Option<Vec<Relation>>,
+    pub(crate) relations: Value,
     /// The characters of the manga.
     #[serde(skip)]
     pub characters: Option<Vec<Character>>,
@@ -171,5 +171,19 @@ impl Manga {
         } else {
             panic!("This manga is already full loaded")
         }
+    }
+
+    /// Returns the relations of the manga.
+    pub fn relations(&self) -> Vec<Relation> {
+        self.relations
+            .as_object()
+            .unwrap()
+            .get("edges")
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| serde_json::from_value(r.clone()).unwrap())
+            .collect()
     }
 }

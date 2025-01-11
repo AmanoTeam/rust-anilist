@@ -2,6 +2,7 @@
 // Copyright (c) 2022-2025 Andriel Ferreira <https://github.com/AndrielFR>
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use super::{
     Character, Cover, Date, Format, Link, Person, Relation, Season, Source, Status, Studio, Tag,
@@ -48,7 +49,6 @@ use crate::{Client, Result};
 /// * `trending` - The trending of the anime.
 /// * `favourites` - The number of favourites of the anime.
 /// * `tags` - The tags of the anime.
-/// * `relations` - The relations of the anime.
 /// * `characters` - The characters of the anime.
 /// * `staff` - The staff of the anime.
 /// * `studios` - The studios of the anime.
@@ -123,8 +123,7 @@ pub struct Anime {
     /// The tags of the anime.
     pub tags: Option<Vec<Tag>>,
     /// The relations of the anime.
-    #[serde(skip)]
-    pub relations: Option<Vec<Relation>>,
+    pub(crate) relations: Value,
     /// The characters of the anime.
     #[serde(skip)]
     pub characters: Option<Vec<Character>>,
@@ -186,6 +185,20 @@ impl Anime {
             panic!("This anime is already full loaded!")
         }
     }
+
+    /// Returns the relations of the anime.
+    pub fn relations(&self) -> Vec<Relation> {
+        self.relations
+            .as_object()
+            .unwrap()
+            .get("edges")
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| serde_json::from_value(r.clone()).unwrap())
+            .collect()
+    }
 }
 
 /// Represents the airing schedule of an anime.
@@ -206,7 +219,7 @@ pub struct AiringSchedule {
     pub id: u32,
     /// The airing date.
     #[serde(rename = "airingAt")]
-    pub at: u64,
+    pub at: i64,
     /// Time until the airing.
     #[serde(rename = "timeUntilAiring")]
     pub time_until: u64,

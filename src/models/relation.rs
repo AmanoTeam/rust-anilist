@@ -4,40 +4,74 @@
 //! This module contains the `Relation` struct and its related types.
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
-use super::{Anime, Manga, MediaType};
+use super::{Anime, Cover, Format, Manga, Media, Status, Title};
 
 /// Represents a relation between different media types.
 ///
 /// The `Relation` struct contains information about the relationship
 /// between different media types, such as anime and manga, including
-/// the media type, related anime or manga, relation ID, relation type,
-/// and whether it is the main studio.
+/// the related media, relation ID, relation type, and whether it is
+/// the main studio.
 ///
 /// # Fields
 ///
-/// * `media_type` - The type of media (e.g., anime, manga).
-/// * `anime` - An optional related anime.
-/// * `manga` - An optional related manga.
 /// * `id` - The ID of the relation.
 /// * `relation_type` - The type of relation (e.g., adaptation, sequel).
 /// * `is_main_studio` - Whether the relation is the main studio.
-// TODO: Use generic type
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Relation {
-    /// The type of media (e.g., anime, manga).
-    pub media_type: MediaType,
-    /// An optional related anime.
-    pub anime: Option<Anime>,
-    /// An optional related manga.
-    pub manga: Option<Manga>,
+    /// The related media.
+    pub(crate) node: Value,
     /// The ID of the relation.
     pub id: i64,
     /// The type of relation (e.g., adaptation, sequel).
     pub relation_type: RelationType,
     /// Whether the relation is the main studio.
     pub is_main_studio: bool,
+}
+
+impl Relation {
+    /// Returns the related media.
+    pub fn media(&self) -> Media {
+        let media = self.node.clone();
+
+        match self.node["type"].as_str() {
+            Some("ANIME") => Media::Anime(Anime {
+                id: media["id"].as_i64().unwrap(),
+                id_mal: media["idMal"].as_i64(),
+                title: Title::deserialize(&media["title"]).unwrap(),
+                format: Format::deserialize(&media["format"]).unwrap(),
+                status: Status::deserialize(&media["status"]).unwrap(),
+                description: media["description"].as_str().unwrap().to_string(),
+                cover: Cover::deserialize(&media["coverImage"]).unwrap(),
+                banner: media["bannerImage"].as_str().map(String::from),
+                average_score: media["averageScore"].as_u64().map(|x| x as u8),
+                mean_score: media["meanScore"].as_u64().map(|x| x as u8),
+                url: media["siteUrl"].as_str().unwrap().to_string(),
+
+                ..Default::default()
+            }),
+            Some("MANGA") => Media::Manga(Manga {
+                id: media["id"].as_i64().unwrap(),
+                id_mal: media["idMal"].as_i64(),
+                title: Title::deserialize(&media["title"]).unwrap(),
+                format: Format::deserialize(&media["format"]).unwrap(),
+                status: Status::deserialize(&media["status"]).unwrap(),
+                description: media["description"].as_str().unwrap().to_string(),
+                cover: Cover::deserialize(&media["coverImage"]).unwrap(),
+                banner: media["bannerImage"].as_str().map(String::from),
+                average_score: media["averageScore"].as_u64().map(|x| x as u8),
+                mean_score: media["meanScore"].as_u64().map(|x| x as u8),
+                url: media["siteUrl"].as_str().unwrap().to_string(),
+
+                ..Default::default()
+            }),
+            _ => Media::Unknown,
+        }
+    }
 }
 
 /// Represents the type of relation between different media.
@@ -62,7 +96,7 @@ pub struct Relation {
 /// * `Compilation` - The media is a compilation of another work.
 /// * `Contains` - The media contains another work.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
-#[serde(rename_all(deserialize = "UPPERCASE"))]
+#[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub enum RelationType {
     /// The media is an adaptation of another work.
     Adaptation,

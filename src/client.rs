@@ -390,6 +390,8 @@ impl Client {
                     description: media["description"].as_str().unwrap().to_string(),
                     cover: Cover::deserialize(&media["coverImage"]).unwrap(),
                     banner: media["bannerImage"].as_str().map(String::from),
+                    average_score: media["averageScore"].as_u64().map(|x| x as u8),
+                    mean_score: media["meanScore"].as_u64().map(|x| x as u8),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
 
                     client: self.clone(),
@@ -448,6 +450,8 @@ impl Client {
                     description: media["description"].as_str().unwrap().to_string(),
                     cover: Cover::deserialize(&media["coverImage"]).unwrap(),
                     banner: media["bannerImage"].as_str().map(String::from),
+                    average_score: media["averageScore"].as_u64().map(|x| x as u8),
+                    mean_score: media["meanScore"].as_u64().map(|x| x as u8),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
 
                     client: self.clone(),
