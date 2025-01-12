@@ -27,6 +27,7 @@ pub enum Gender {
     #[serde(rename = "Non-binary")]
     NonBinary,
     /// Represents a custom gender specified by a string.
+    #[serde(untagged)]
     Other(String),
 }
 

@@ -202,10 +202,11 @@ impl Anime {
             let node = edge.get("node").unwrap();
             let role = edge.get("role").unwrap().as_str().unwrap();
 
-            let mut character = serde_json::from_value::<Character>(node.clone()).unwrap();
-            character.role = Some(role.into());
+            if let Ok(mut character) = serde_json::from_value::<Character>(node.clone()) {
+                character.role = Some(role.into());
 
-            characters.push(character);
+                characters.push(character);
+            }
         }
 
         characters
