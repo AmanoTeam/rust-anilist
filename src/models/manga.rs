@@ -124,7 +124,7 @@ pub struct Manga {
     /// Whether the manga is blocked or not.
     pub is_favourite_blocked: Option<bool>,
     /// Whether the manga is adult or not.
-    pub is_adult: Option<bool>,
+    pub is_adult: bool,
     /// The external links of the manga.
     pub external_links: Option<Vec<Link>>,
     /// The site URL of the manga.
@@ -170,16 +170,31 @@ impl Manga {
 
     /// Returns the characters of the manga.
     pub fn characters(&self) -> Vec<Character> {
-        self.characters
+        let edges = self
+            .characters
             .as_object()
             .unwrap()
-            .get("nodes")
+            .get("edges")
             .unwrap()
             .as_array()
             .unwrap()
             .iter()
-            .map(|c| serde_json::from_value(c.clone()).unwrap())
-            .collect()
+            .map(|e| e.as_object().unwrap())
+            .collect::<Vec<_>>();
+
+        let mut characters = Vec::with_capacity(edges.len());
+
+        for edge in edges {
+            let node = edge.get("node").unwrap();
+            let role = edge.get("role").unwrap().as_str().unwrap();
+
+            let mut character = serde_json::from_value::<Character>(node.clone()).unwrap();
+            character.role = Some(role.into());
+
+            characters.push(character);
+        }
+
+        characters
     }
 
     /// Returns the relations of the manga.

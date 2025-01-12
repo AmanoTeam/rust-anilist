@@ -134,7 +134,7 @@ pub struct Anime {
     /// Whether the anime is favourite blocked or not.
     pub is_favourite_blocked: Option<bool>,
     /// Whether the anime is adult or not.
-    pub is_adult: Option<bool>,
+    pub is_adult: bool,
     /// The next airing episode of the anime.
     pub next_airing_episode: Option<AiringSchedule>,
     /// The external links of the anime.
@@ -184,16 +184,31 @@ impl Anime {
 
     /// Returns the characters of the anime.
     pub fn characters(&self) -> Vec<Character> {
-        self.characters
+        let edges = self
+            .characters
             .as_object()
             .unwrap()
-            .get("nodes")
+            .get("edges")
             .unwrap()
             .as_array()
             .unwrap()
             .iter()
-            .map(|c| serde_json::from_value(c.clone()).unwrap())
-            .collect()
+            .map(|e| e.as_object().unwrap())
+            .collect::<Vec<_>>();
+
+        let mut characters = Vec::with_capacity(edges.len());
+
+        for edge in edges {
+            let node = edge.get("node").unwrap();
+            let role = edge.get("role").unwrap().as_str().unwrap();
+
+            let mut character = serde_json::from_value::<Character>(node.clone()).unwrap();
+            character.role = Some(role.into());
+
+            characters.push(character);
+        }
+
+        characters
     }
 
     /// Returns the relations of the anime.

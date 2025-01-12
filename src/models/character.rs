@@ -123,6 +123,22 @@ pub enum CharacterRole {
     Supporting,
 }
 
+impl From<&str> for CharacterRole {
+    fn from(value: &str) -> Self {
+        match value {
+            "MAIN" => CharacterRole::Main,
+            "SUPPORTING" => CharacterRole::Supporting,
+            _ => CharacterRole::Background,
+        }
+    }
+}
+
+impl From<String> for CharacterRole {
+    fn from(value: String) -> Self {
+        CharacterRole::from(value.as_str())
+    }
+}
+
 impl Display for CharacterRole {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

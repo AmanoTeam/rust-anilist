@@ -392,6 +392,7 @@ impl Client {
                     banner: media["bannerImage"].as_str().map(String::from),
                     average_score: media["averageScore"].as_u64().map(|x| x as u8),
                     mean_score: media["meanScore"].as_u64().map(|x| x as u8),
+                    is_adult: media["isAdult"].as_bool().unwrap(),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
 
                     client: self.clone(),
@@ -452,6 +453,7 @@ impl Client {
                     banner: media["bannerImage"].as_str().map(String::from),
                     average_score: media["averageScore"].as_u64().map(|x| x as u8),
                     mean_score: media["meanScore"].as_u64().map(|x| x as u8),
+                    is_adult: media["isAdult"].as_bool().unwrap(),
                     url: media["siteUrl"].as_str().unwrap().to_string(),
 
                     client: self.clone(),

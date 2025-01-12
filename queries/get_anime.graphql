@@ -92,24 +92,28 @@ query ($id: Int) {
       }
     }
     characters(sort: RELEVANCE) {
-      nodes {
-        id
-        name {
-          first
-          middle
-          last
-          full
-          native
-          alternative
-          alternativeSpoiler
-          userPreferred
+      edges {
+        node {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            alternative
+            alternativeSpoiler
+            userPreferred
+          }
+          image {
+            large
+            medium
+          }
+          description(asHtml: true)
+          gender
+          siteUrl
         }
-        image {
-          large
-          medium
-        }
-        description(asHtml: true)
-        siteUrl
+        role
       }
     }
     staff(sort: RELEVANCE) {
