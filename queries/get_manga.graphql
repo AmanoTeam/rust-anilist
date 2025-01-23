@@ -88,7 +88,7 @@ query ($id: Int) {
         isMainStudio
       }
     }
-    characters(sort: RELEVANCE) {
+    characters(sort: FAVOURITES) {
       edges {
         node {
           id
