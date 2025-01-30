@@ -20,7 +20,7 @@ use super::{Anime, Cover, Format, Manga, Media, Status, Title};
 /// * `id` - The ID of the relation.
 /// * `relation_type` - The type of relation (e.g., adaptation, sequel).
 /// * `is_main_studio` - Whether the relation is the main studio.
-#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Relation {
     /// The related media.

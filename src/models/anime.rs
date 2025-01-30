@@ -183,47 +183,47 @@ impl Anime {
     }
 
     /// Returns the characters of the anime.
-    pub fn characters(&self) -> Vec<Character> {
+    pub fn characters(&self) -> Result<Vec<Character>> {
+        let binding = Vec::new();
         let edges = self
             .characters
             .as_object()
-            .unwrap()
-            .get("edges")
-            .unwrap()
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|e| e.as_object().unwrap())
-            .collect::<Vec<_>>();
+            .and_then(|obj| obj.get("edges"))
+            .and_then(|edges| edges.as_array())
+            .unwrap_or(&binding);
 
         let mut characters = Vec::with_capacity(edges.len());
 
         for edge in edges {
-            let node = edge.get("node").unwrap();
-            let role = edge.get("role").unwrap().as_str().unwrap();
+            let binding = serde_json::Map::new();
+            let obj = edge.as_object().unwrap_or(&binding);
+            let node = obj.get("node").unwrap_or(&Value::Null);
+            let role = obj.get("role").and_then(|role| role.as_str()).unwrap_or("");
 
-            if let Ok(mut character) = serde_json::from_value::<Character>(node.clone()) {
-                character.role = Some(role.into());
-
-                characters.push(character);
-            }
+            let mut character: Character = serde_json::from_value(node.clone()).unwrap_or_default();
+            character.role = Some(role.into());
+            characters.push(character);
         }
 
-        characters
+        Ok(characters)
     }
 
     /// Returns the relations of the anime.
-    pub fn relations(&self) -> Vec<Relation> {
-        self.relations
+    pub fn relations(&self) -> Result<Vec<Relation>> {
+        let binding = Vec::new();
+        let edges = self
+            .relations
             .as_object()
-            .unwrap()
-            .get("edges")
-            .unwrap()
-            .as_array()
-            .unwrap()
+            .and_then(|obj| obj.get("edges"))
+            .and_then(|edges| edges.as_array())
+            .unwrap_or(&binding);
+
+        let relations = edges
             .iter()
-            .map(|r| serde_json::from_value(r.clone()).unwrap())
-            .collect()
+            .map(|r| serde_json::from_value(r.clone()).unwrap_or_default())
+            .collect();
+
+        Ok(relations)
     }
 }
 

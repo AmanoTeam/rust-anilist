@@ -23,4 +23,7 @@ pub enum Error {
     /// An error indicating that the API returned an error.
     #[error("api error: `{0}`")]
     ApiError(String),
+    /// An error indicating that the API returned an invalid response.
+    #[error("Failed to parse JSON")]
+    JsonParseError(#[from] serde_json::Error),
 }
