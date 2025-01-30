@@ -14,12 +14,6 @@ use super::{Anime, Cover, Format, Manga, Media, Status, Title};
 /// between different media types, such as anime and manga, including
 /// the related media, relation ID, relation type, and whether it is
 /// the main studio.
-///
-/// # Fields
-///
-/// * `id` - The ID of the relation.
-/// * `relation_type` - The type of relation (e.g., adaptation, sequel).
-/// * `is_main_studio` - Whether the relation is the main studio.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Relation {
@@ -79,22 +73,6 @@ impl Relation {
 /// The `RelationType` enum defines various types of relationships that
 /// can exist between different media, such as adaptations, sequels,
 /// prequels, and more.
-///
-/// # Variants
-///
-/// * `Adaptation` - The media is an adaptation of another work.
-/// * `Prequel` - The media is a prequel to another work.
-/// * `Sequel` - The media is a sequel to another work.
-/// * `Parent` - The media is a parent story to another work.
-/// * `SideStory` - The media is a side story to another work.
-/// * `Character` - The media shares characters with another work.
-/// * `Summary` - The media is a summary of another work.
-/// * `Alternative` - The media is an alternative version of another work.
-/// * `SpinOff` - The media is a spin-off of another work.
-/// * `Other` - The media has some other type of relation to another work.
-/// * `Source` - The media is the source material for another work.
-/// * `Compilation` - The media is a compilation of another work.
-/// * `Contains` - The media contains another work.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub enum RelationType {

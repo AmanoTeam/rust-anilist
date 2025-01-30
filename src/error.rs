@@ -3,8 +3,6 @@
 
 //! This module contains the `Error` enum.
 
-use thiserror::Error as TError;
-
 /// A specialized `Result` type for operations that can return an `Error`.
 ///
 /// This is defined as a convenience to avoid writing out `std::result::Result`
@@ -15,7 +13,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 ///
 /// This enum defines different types of errors that can be encountered,
 /// such as invalid IDs and API errors.
-#[derive(TError, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub enum Error {
     /// An error indicating that the ID is invalid.
     #[error("invalid ID")]

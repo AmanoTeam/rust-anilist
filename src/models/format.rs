@@ -10,19 +10,6 @@ use serde::{Deserialize, Serialize};
 /// The `Format` enum defines various formats that a media item can have,
 /// such as TV shows, movies, specials, OVAs, ONAs, music, manga, novels,
 /// and one-shots.
-///
-/// # Variants
-///
-/// * `Tv` - Represents a TV show.
-/// * `TvShort` - Represents a short TV show.
-/// * `Movie` - Represents a movie.
-/// * `Special` - Represents a special.
-/// * `Ova` - Represents an original video animation.
-/// * `Ona` - Represents an original net animation.
-/// * `Music` - Represents a music video.
-/// * `Manga` - Represents a manga.
-/// * `Novel` - Represents a novel.
-/// * `OneShot` - Represents a one-shot.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub enum Format {

@@ -9,35 +9,6 @@ use serde::{Deserialize, Serialize};
 ///
 /// The `Language` enum defines a list of supported languages, each with
 /// an associated variant. The default language is Japanese.
-///
-/// # Variants
-///
-/// * `Japanese` - The Japanese language.
-/// * `English` - The English language.
-/// * `Korean` - The Korean language.
-/// * `Italian` - The Italian language.
-/// * `Spanish` - The Spanish language.
-/// * `Portuguese` - The Portuguese language.
-/// * `French` - The French language.
-/// * `German` - The German language.
-/// * `Hebrew` - The Hebrew language.
-/// * `Hungarian` - The Hungarian language.
-/// * `Chinese` - The Chinese language.
-/// * `Arabic` - The Arabic language.
-/// * `Filipino` - The Filipino language.
-/// * `Catalan` - The Catalan language.
-/// * `Finnish` - The Finnish language.
-/// * `Turkish` - The Turkish language.
-/// * `Dutch` - The Dutch language.
-/// * `Swedish` - The Swedish language.
-/// * `Thai` - The Thai language.
-/// * `Tagalog` - The Tagalog language.
-/// * `Malaysian` - The Malaysian language.
-/// * `Indonesian` - The Indonesian language.
-/// * `Vietnamese` - The Vietnamese language.
-/// * `Nepali` - The Nepali language.
-/// * `Hindi` - The Hindi language.
-/// * `Urdu` - The Urdu language.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "PascalCase"))]
 pub enum Language {

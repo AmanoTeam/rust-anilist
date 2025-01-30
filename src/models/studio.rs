@@ -12,15 +12,6 @@ use crate::Result;
 /// The `Studio` struct contains detailed information about a studio,
 /// including its ID, name, whether it is an animation studio, URL,
 /// whether it is a favorite, and the number of favorites.
-///
-/// # Fields
-///
-/// * `id` - The ID of the studio.
-/// * `name` - The name of the studio.
-/// * `is_animation_studio` - Whether the studio is an animation studio.
-/// * `url` - The URL of the studio.
-/// * `is_favourite` - An optional boolean indicating if the studio is a favorite.
-/// * `favourites` - The number of favorites the studio has.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Studio {

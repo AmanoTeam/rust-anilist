@@ -11,13 +11,6 @@ use crate::models::Color;
 ///
 /// The `Cover` struct contains URLs for the cover images in different sizes
 /// (extra large, large, and medium) and an optional color.
-///
-/// # Fields
-///
-/// * `extra_large` - The URL of the cover image in extra large size.
-/// * `large` - The URL of the cover image in large size.
-/// * `medium` - The URL of the cover image in medium size.
-/// * `color` - The color of the cover image.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Cover {

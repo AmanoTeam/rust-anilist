@@ -57,16 +57,6 @@ use serde::{Deserialize, Serialize};
 ///
 /// The `MediaType` enum defines various types of media, such as anime,
 /// manga, character, user, person, studio, and an unknown type.
-///
-/// # Variants
-///
-/// * `Anime` - Represents an anime.
-/// * `Manga` - Represents a manga.
-/// * `Character` - Represents a character.
-/// * `User` - Represents a user.
-/// * `Person` - Represents a person.
-/// * `Studio` - Represents a studio.
-/// * `Unknown` - Represents an unknown type of media.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 pub enum MediaType {
     /// An anime.

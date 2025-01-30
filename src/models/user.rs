@@ -17,27 +17,6 @@ use crate::{Client, Result};
 /// status, favourites, follow status, media list options, site URL,
 /// statistics, notification count, and timestamps for creation and
 /// updates.
-///
-/// # Fields
-///
-/// * `id` - The ID of the user.
-/// * `name` - The name of the user.
-/// * `about` - An optional about section for the user.
-/// * `avatar` - An optional avatar image for the user.
-/// * `banner` - An optional banner image for the user.
-/// * `donator_badge` - The donator badge of the user.
-/// * `donator_tier` - The donator tier of the user.
-/// * `favourites` - The user's favourites.
-/// * `is_blocked` - An optional boolean indicating if the user is blocked.
-/// * `is_follower` - An optional boolean indicating if the user is a follower.
-/// * `is_following` - An optional boolean indicating if the user is following someone.
-/// * `media_list_options` - Optional media list options for the user.
-/// * `options` - Optional additional options for the user.
-/// * `url` - The site URL of the user.
-/// * `statistics` - The user's statistics.
-/// * `unread_notification_count` - An optional count of unread notifications.
-/// * `created_at` - The timestamp when the user was created.
-/// * `updated_at` - The timestamp when the user was last updated.
 #[derive(Debug, Default, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct User {

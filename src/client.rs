@@ -616,11 +616,6 @@ impl Default for Client {
 ///
 /// The `Action` enum defines various actions that the client can perform,
 /// such as getting media by ID or searching for media.
-///
-/// # Variants
-///
-/// * `Get` - Represents the action of getting media by ID.
-/// * `Search` - Represents the action of searching for media.
 enum Action {
     /// Get media by ID.
     Get,

@@ -10,17 +10,6 @@ use serde::{Deserialize, Serialize};
 /// The `Color` enum defines a list of supported colors, each with an
 /// associated variant. Additionally, it supports custom colors defined
 /// by a hex string.
-///
-/// # Variants
-///
-/// * `Blue` - The blue color.
-/// * `Purple` - The purple color. This is the default color.
-/// * `Pink` - The pink color.
-/// * `Orange` - The orange color.
-/// * `Red` - The red color.
-/// * `Green` - The green color.
-/// * `Gray` - The gray color.
-/// * `Hex(String)` - A custom color defined by a hex string.
 #[derive(Debug, Default, Clone, Eq, Hash, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all(deserialize = "UPPERCASE"))]
 pub enum Color {
